@@ -1,4 +1,6 @@
 import networkx as nx
+import qiskit
+from qiskit.optimization.applications.ising import max_cut
 
 
 class GraphsGenerator:
@@ -18,3 +20,8 @@ class GraphsGenerator:
     @staticmethod
     def generate_random_graph(number_of_vertices: int, edge_generation_probability: float):
         return nx.erdos_renyi_graph(number_of_vertices, edge_generation_probability)
+
+    @staticmethod
+    def get_weight_matrix(graph):
+        return nx.adjacency_matrix(graph)
+
