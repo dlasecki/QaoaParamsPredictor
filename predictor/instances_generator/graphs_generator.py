@@ -20,4 +20,4 @@ def generate_random_graph(number_of_vertices: int, edge_generation_probability: 
 
 
 def get_weight_matrix(graph):
-    return nx.adjacency_matrix(graph)
+    return nx.to_numpy_matrix(graph).A
