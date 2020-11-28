@@ -1,6 +1,6 @@
 from qiskit.aqua.components.optimizers import COBYLA
 
-import instances_generator.graphs_generator as gg
+import instances_generator.graphs_builder as gg
 from instances_generator import maxcut
 from qaoa_solver.qaoa import qaoa
 

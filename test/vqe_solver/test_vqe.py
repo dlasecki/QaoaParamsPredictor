@@ -1,4 +1,4 @@
-import instances_generator.graphs_generator as gg
+import instances_generator.graphs_builder as gg
 import vqe_solver.vqe as qm
 from instances_generator import maxcut
 
