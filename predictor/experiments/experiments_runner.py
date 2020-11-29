@@ -2,33 +2,30 @@ import itertools
 import multiprocessing
 import time
 
-from experiments import starting_points_generator, optimizers_provider
-from instances_generator.maxcut import generate_instances_operators
+from experiments import optimizers_provider
 from instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
     generate_barbell_graph_instances, generate_random_graph_instances, generate_caveman_graph_instances
+from instances_generator.maxcut import generate_instances_operators
 from qaoa_solver import qaoa
 
 
-def worker(qaoa_operator, p_param, optimizer, initial_point):
-    qaoa_res = qaoa.qaoa(qaoa_operator, p_param, optimizer, initial_point)
+def worker(qaoa_operator, p_param, optimizer, initial_points_num):
+    print(multiprocessing.current_process())
+    qaoa_res = qaoa.qaoa(qaoa_operator, p_param, optimizer, initial_points_num)
     print(qaoa_res.optimal_params)
-    # print(multiprocessing.current_process())
-    # results_list.append(qaoa_res)
+    return (qaoa_res.optimal_params, qaoa_res.get_optimal_cost())
 
 
-def get_cartesian_product_of_inputs(graph_instances_train_operators, p_params, optimizers, initial_points):
-    return itertools.product([graph_instances_train_operators, p_params, optimizers, initial_points])
+def get_cartesian_product_of_inputs(graph_instances_train_operators, p_params, optimizers, initial_points_num):
+    return itertools.product(graph_instances_train_operators, p_params, optimizers, initial_points_num)
 
 
 if __name__ == '__main__':
-    # manager = multiprocessing.Manager()
-    # results = manager.list()
-
     start = time.perf_counter()
     p_params = [1, 2, 3, 4]
     # p_params = [1, 2]
     optimizers = [optimizers_provider.get_cobyla_optimizer()]
-    num_of_starting_points = [1000]
+    num_of_starting_points = [10]
 
     random_graph_num_of_vertices_train = [8]
     random_graph_probabilities_train = [0.5, 0.6, 0.7, 0.8]
@@ -59,21 +56,16 @@ if __name__ == '__main__':
         caveman_graph_instances_cliques_train)
     barbell_graph_instances_train_operators = generate_instances_operators(barbell_graph_instances_train)
 
-    initial_points = starting_points_generator.generate_starting_points(p_params, num_of_starting_points)
+    NUM_OF_PROCESSES = 10
 
-    # for p in p_params:
-    #     for operator in random_graph_instances_train_operators:
-    #         res = multiprocessing.Process(target=worker, args=(operator, p, optimizers[0]))
-    #         res.start()
-
-    NUM_OF_PROCESSES = 8
     inputs = get_cartesian_product_of_inputs(random_graph_instances_train_operators, p_params, optimizers,
-                                             initial_points)
-    with multiprocessing.Pool(NUM_OF_PROCESSES) as pool:
-        results = pool.map(worker, inputs)
+                                             num_of_starting_points)
 
-    end = time.perf_counter()
+    with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
+        results = pool.starmap(worker, inputs)
 
     print(results)
+
+    end = time.perf_counter()
 
     print(str(end - start) + " seconds")
