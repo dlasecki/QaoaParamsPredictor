@@ -14,12 +14,11 @@ def worker(input_graph, p_param, optimizer, initial_points_num):
     problem_instance = MaxCutProblemInstance(1, p_param, input_graph, optimizer, initial_points_num)
     qaoa_res = qaoa.qaoa(problem_instance)
     print(qaoa_res.optimal_params)
-    return qaoa_res.optimal_params, qaoa_res.get_optimal_cost()
+    return qaoa_res.optimal_params, qaoa_res.min_value
 
 
 def get_cartesian_product_of_inputs(graph_instances_train_operators, p_params, optimizers, initial_points_num):
     return itertools.product(graph_instances_train_operators, p_params, optimizers, initial_points_num)
-
 
 
 if __name__ == '__main__':
