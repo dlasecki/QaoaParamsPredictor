@@ -2,10 +2,18 @@ from qiskit import Aer
 from qiskit.aqua import QuantumInstance
 from qiskit.aqua.algorithms import QAOA
 
+from problem_instances.ProblemInstance import ProblemInstance
 
-def qaoa(qubit_operator, p, optimizer, initial_points_num):
+
+def qaoa(problem_instance: ProblemInstance):
     backend = Aer.get_backend('statevector_simulator')
     quantum_instance = QuantumInstance(backend)
+
+    qubit_operator = problem_instance.get_qaoa_operator()
+    p = problem_instance.p
+    optimizer = problem_instance.optimizer
+    initial_points_num = problem_instance.num_starting_points
+
     min_cost = None
     qaoa_object_min_cost = None
     for roundId in range(initial_points_num):

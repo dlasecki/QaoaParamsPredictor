@@ -5,19 +5,21 @@ import time
 from experiments import optimizers_provider
 from instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
     generate_barbell_graph_instances, generate_random_graph_instances, generate_caveman_graph_instances
-from instances_generator.maxcut import generate_instances_operators
+from problem_instances.MaxCutProblemInstance import MaxCutProblemInstance
 from qaoa_solver import qaoa
 
 
-def worker(qaoa_operator, p_param, optimizer, initial_points_num):
+def worker(input_graph, p_param, optimizer, initial_points_num):
     print(multiprocessing.current_process())
-    qaoa_res = qaoa.qaoa(qaoa_operator, p_param, optimizer, initial_points_num)
+    problem_instance = MaxCutProblemInstance(1, p_param, input_graph, optimizer, initial_points_num)
+    qaoa_res = qaoa.qaoa(problem_instance)
     print(qaoa_res.optimal_params)
-    return (qaoa_res.optimal_params, qaoa_res.get_optimal_cost())
+    return qaoa_res.optimal_params, qaoa_res.get_optimal_cost()
 
 
 def get_cartesian_product_of_inputs(graph_instances_train_operators, p_params, optimizers, initial_points_num):
     return itertools.product(graph_instances_train_operators, p_params, optimizers, initial_points_num)
+
 
 
 if __name__ == '__main__':
@@ -50,15 +52,9 @@ if __name__ == '__main__':
     caveman_graph_instances_cliques_train = generate_caveman_graph_instances(caveman_graph_cliques_train)
     barbell_graph_instances_train = generate_barbell_graph_instances(barbell_graph_num_of_vertices_train)
 
-    random_graph_instances_train_operators = generate_instances_operators(random_graph_instances_train)
-    ladder_graph_instances_train_operators = generate_instances_operators(ladder_graph_instances_train)
-    caveman_graph_instances_cliques_train_operators = generate_instances_operators(
-        caveman_graph_instances_cliques_train)
-    barbell_graph_instances_train_operators = generate_instances_operators(barbell_graph_instances_train)
-
     NUM_OF_PROCESSES = 10
 
-    inputs = get_cartesian_product_of_inputs(random_graph_instances_train_operators, p_params, optimizers,
+    inputs = get_cartesian_product_of_inputs(random_graph_instances_train, p_params, optimizers,
                                              num_of_starting_points)
 
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
