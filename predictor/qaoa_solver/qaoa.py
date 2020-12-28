@@ -23,4 +23,7 @@ def qaoa(problem_instance: ProblemInstance):
             min_cost = qaoa_object.get_optimal_cost()
             qaoa_object_min_cost = qaoa_object
 
-    return qaoa_object_min_cost
+    problem_instance.min_value = min_cost
+    problem_instance.optimal_params = qaoa_object_min_cost.optimal_params
+
+    return problem_instance

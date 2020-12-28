@@ -1,14 +1,17 @@
-from qiskit.aqua.components.optimizers import COBYLA
-
 import instances_generator.graphs_builder as gg
+from experiments import optimizers_provider
+from problem_instances.MaxCutProblemInstance import MaxCutProblemInstance
 from qaoa_solver.qaoa import qaoa
 
 
 def test_run_qaoa():
-    ladder_graph = gg.generate_ladder_graph(3)
-    optimizer = COBYLA()
-    result = qaoa(ladder_graph_qubit_operator, 3, optimizer)
-    print(result.get_optimal_cost())
-    print(result.optimal_params)
-    print(result.var_form)
-    assert isinstance(result.get_optimal_cost(), float), "Optimal value not a float."
+    problem_id = "1"
+    p = 1
+    input_graph = gg.generate_ladder_graph(3)
+    optimizer = optimizers_provider.get_cobyla_optimizer()
+    num_starting_points = 1
+
+    problem_instance = MaxCutProblemInstance(problem_id, p, input_graph, optimizer, num_starting_points)
+    result = qaoa(problem_instance)
+
+    assert isinstance(result.min_value, float), "Optimal value not a float."
