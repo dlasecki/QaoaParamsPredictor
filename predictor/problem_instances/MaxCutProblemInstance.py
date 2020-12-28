@@ -11,4 +11,5 @@ class MaxCutProblemInstance(ProblemInstance):
         self.weight_operator = graphs_builder.get_weight_matrix(input_graph)
 
     def get_qaoa_operator(self):
-        return max_cut.get_operator(self.weight_operator)
+        qubit_operator, offset = max_cut.get_operator(self.weight_operator)
+        return qubit_operator
