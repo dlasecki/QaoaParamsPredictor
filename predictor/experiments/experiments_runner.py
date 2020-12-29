@@ -1,8 +1,9 @@
 import itertools
 import multiprocessing
 import time
+from random import Random
 
-from experiments import optimizers_provider
+from experiments import optimizers_provider, results_serializer
 from instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
     generate_barbell_graph_instances, generate_random_graph_instances, generate_caveman_graph_instances
 from problem_instances.MaxCutProblemInstance import MaxCutProblemInstance
@@ -10,10 +11,15 @@ from qaoa_solver import qaoa
 
 
 def worker(input_graph, p_param, optimizer, initial_points_num):
-    print(multiprocessing.current_process())
-    problem_instance = MaxCutProblemInstance(1, p_param, input_graph, optimizer, initial_points_num)
+    print("Started")
+    random = Random()
+    problem_instance = MaxCutProblemInstance(random.randint(1, 100), p_param, input_graph, optimizer,
+                                             initial_points_num)  # TODO add id generator
     qaoa_res = qaoa.qaoa(problem_instance)
-    print(qaoa_res.optimal_params)
+    print(qaoa_res)
+    results_serializer.save_to_json('C:\\Users\\darek\\PycharmProjects\\QaoaParamsPredictor\\predictor\\output',
+                                    qaoa_res)
+
     return qaoa_res.optimal_params, qaoa_res.min_value
 
 
@@ -23,8 +29,8 @@ def get_cartesian_product_of_inputs(graph_instances_train_operators, p_params, o
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    p_params = [1, 2, 3, 4]
-    # p_params = [1, 2]
+    # p_params = [1, 2, 3, 4]
+    p_params = [1]
     optimizers = [optimizers_provider.get_cobyla_optimizer()]
     num_of_starting_points = [10]
 
