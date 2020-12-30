@@ -9,7 +9,7 @@ def qaoa(problem_instance: ProblemInstance):
     backend = Aer.get_backend('statevector_simulator')
     quantum_instance = QuantumInstance(backend)
 
-    qubit_operator = problem_instance.get_qaoa_operator()
+    qubit_operator = problem_instance.qubit_operator
     p = problem_instance.p
     optimizer = problem_instance.optimizer
     initial_points_num = problem_instance.num_starting_points

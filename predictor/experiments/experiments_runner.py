@@ -11,13 +11,11 @@ from qaoa_solver import qaoa
 
 
 def worker(input_graph, p_param, optimizer, initial_points_num):
-    print("Started")
     random = Random()
     problem_instance = MaxCutProblemInstance(random.randint(1, 100), p_param, input_graph, optimizer,
                                              initial_points_num)  # TODO add id generator
     qaoa_res = qaoa.qaoa(problem_instance)
-    print(qaoa_res)
-    results_serializer.save_to_json('C:\\Users\\darek\\PycharmProjects\\QaoaParamsPredictor\\predictor\\output',
+    results_serializer.save_to_json('output',
                                     qaoa_res)
 
     return qaoa_res.optimal_params, qaoa_res.min_value
