@@ -1,7 +1,7 @@
 from qiskit.optimization.applications.ising import max_cut
 
 import instances_generator.graph_weight_matrix_calculator
-from problem_instances.ProblemInstance import ProblemInstance
+from problem_instances.graph_problems.ProblemInstance import ProblemInstance
 
 
 class MaxCutProblemInstance(ProblemInstance):

@@ -1,6 +1,6 @@
 import json
 
-from problem_instances.ProblemInstance import ProblemInstance
+from problem_instances.graph_problems.ProblemInstance import ProblemInstance
 from problem_instances.Result import Result
 
 

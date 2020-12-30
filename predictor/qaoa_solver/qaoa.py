@@ -2,7 +2,7 @@ from qiskit import Aer
 from qiskit.aqua import QuantumInstance
 from qiskit.aqua.algorithms import QAOA
 
-from problem_instances.ProblemInstance import ProblemInstance
+from problem_instances.graph_problems.ProblemInstance import ProblemInstance
 
 
 def qaoa(problem_instance: ProblemInstance):

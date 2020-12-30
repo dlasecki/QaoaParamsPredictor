@@ -6,7 +6,7 @@ from random import Random
 from experiments import optimizers_provider, results_serializer
 from instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
     generate_barbell_graph_instances, generate_random_graph_instances, generate_caveman_graph_instances
-from problem_instances.MaxCutProblemInstance import MaxCutProblemInstance
+from problem_instances.graph_problems.specializations.MaxCutProblemInstance import MaxCutProblemInstance
 from qaoa_solver import qaoa
 
 
