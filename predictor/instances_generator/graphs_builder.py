@@ -1,6 +1,4 @@
 import networkx as nx
-import qiskit
-from qiskit.optimization.applications.ising import max_cut
 
 
 def generate_caveman_graph(number_of_cliques: int, size_of_cliques: int):
@@ -19,5 +17,3 @@ def generate_random_graph(number_of_vertices: int, edge_generation_probability: 
     return nx.erdos_renyi_graph(number_of_vertices, edge_generation_probability)
 
 
-def get_weight_matrix(graph):
-    return nx.to_numpy_matrix(graph).A

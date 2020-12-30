@@ -4,7 +4,7 @@ from qiskit.aqua.operators import WeightedPauliOperator
 class ProblemInstance:
 
     def __init__(self, problem_id, problem_name, p, input_graph, optimizer, num_starting_points, optimal_params,
-                 min_value, qubit_operator : WeightedPauliOperator, offset):
+                 min_value, qubit_operator: WeightedPauliOperator, offset):
         self.problem_id = problem_id
         self.problem_name = problem_name
         self.p = p

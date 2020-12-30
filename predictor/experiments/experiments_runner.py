@@ -15,13 +15,12 @@ def worker(input_graph, p_param, optimizer, initial_points_num):
     problem_instance = MaxCutProblemInstance(random.randint(1, 100), p_param, input_graph, optimizer,
                                              initial_points_num)  # TODO add id generator
     qaoa_res = qaoa.qaoa(problem_instance)
-    results_serializer.save_to_json('output',
-                                    qaoa_res)
+    results_serializer.save_to_json('output', qaoa_res)
 
     return qaoa_res.optimal_params, qaoa_res.min_value
 
 
-def get_cartesian_product_of_inputs(graph_instances_train_operators, p_params, optimizers, initial_points_num):
+def __get_cartesian_product_of_inputs(graph_instances_train_operators, p_params, optimizers, initial_points_num):
     return itertools.product(graph_instances_train_operators, p_params, optimizers, initial_points_num)
 
 
@@ -57,8 +56,8 @@ if __name__ == '__main__':
 
     NUM_OF_PROCESSES = 10
 
-    inputs = get_cartesian_product_of_inputs(random_graph_instances_train, p_params, optimizers,
-                                             num_of_starting_points)
+    inputs = __get_cartesian_product_of_inputs(random_graph_instances_train, p_params, optimizers,
+                                               num_of_starting_points)
 
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
         results = pool.starmap(worker, inputs)
