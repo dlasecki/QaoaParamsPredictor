@@ -1,5 +1,6 @@
 import json
 
+from converters import complex_ndarray_to_list
 from problem_instances.graph_problems.ProblemInstance import ProblemInstance
 from problem_instances.Result import Result
 
@@ -20,5 +21,6 @@ def read_from_json(directory: str, file_name: str):
 
 
 def __create_result(problem_instance: ProblemInstance):
-    return Result(problem_instance.problem_id, problem_instance.problem_name, problem_instance.optimal_params.tolist(),
-                  problem_instance.min_value)
+    return Result(problem_instance.problem_id, problem_instance.problem_name,
+                  complex_ndarray_to_list.complex_ndarray_to_list(problem_instance.hamiltonian_matrix),
+                  problem_instance.optimal_params.tolist(), problem_instance.min_value)

@@ -1,4 +1,5 @@
 from qiskit.aqua.operators import WeightedPauliOperator
+from qiskit.aqua.operators.legacy import op_converter
 
 
 class ProblemInstance:
@@ -15,3 +16,4 @@ class ProblemInstance:
         self.min_value = min_value
         self.qubit_operator = qubit_operator
         self.offset = offset
+        self.hamiltonian_matrix = op_converter.to_matrix_operator(qubit_operator).matrix
