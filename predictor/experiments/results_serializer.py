@@ -1,12 +1,13 @@
 import json
 
 from converters import complex_ndarray_to_list
-from problem_instances.graph_problems.ProblemInstance import ProblemInstance
+from problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 from problem_instances.Result import Result
 
 
 def save_to_json(directory: str, data: ProblemInstance):
-    file_name = data.problem_name + str(data.problem_id)
+    file_name = data.problem_name + data.input_graph.graph["graph_type"] + str(
+        data.input_graph.graph["graph_id"]) + "p=" + str(data.p)
     result = __create_result(data)
     with open(directory + "\\" + file_name + ".json", 'w') as outfile:
         print(outfile)
@@ -21,6 +22,8 @@ def read_from_json(directory: str, file_name: str):
 
 
 def __create_result(problem_instance: ProblemInstance):
-    return Result(problem_instance.problem_id, problem_instance.problem_name,
+    return Result(problem_instance.problem_name,
                   complex_ndarray_to_list.complex_ndarray_to_list(problem_instance.hamiltonian_matrix),
-                  problem_instance.optimal_params.tolist(), problem_instance.min_value)
+                  problem_instance.weight_matrix.tolist(), problem_instance.optimal_params.tolist(),
+                  problem_instance.min_value, problem_instance.most_likely_binary_solution.tolist(),
+                  problem_instance.most_likely_solution_value)

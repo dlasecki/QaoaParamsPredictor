@@ -1,7 +1,6 @@
 import itertools
 import multiprocessing
 import time
-from random import Random
 
 from experiments import optimizers_provider, results_serializer
 from instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
@@ -11,9 +10,8 @@ from qaoa_solver import qaoa
 
 
 def worker(input_graph, p_param, optimizer, initial_points_num):
-    random = Random()
-    problem_instance = MaxCutProblemInstance(random.randint(1, 100), p_param, input_graph, optimizer,
-                                             initial_points_num)  # TODO add id generator
+    problem_instance = MaxCutProblemInstance(p_param, input_graph, optimizer,
+                                             initial_points_num)
     qaoa_res = qaoa.qaoa(problem_instance)
     results_serializer.save_to_json('output', qaoa_res)
 
@@ -26,8 +24,8 @@ def __get_cartesian_product_of_inputs(graph_instances_train_operators, p_params,
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    # p_params = [1, 2, 3, 4]
-    p_params = [1]
+    p_params = [1, 2, 3, 4]
+    #p_params = [1]
     optimizers = [optimizers_provider.get_cobyla_optimizer()]
     num_of_starting_points = [10]
 
@@ -56,8 +54,16 @@ if __name__ == '__main__':
 
     NUM_OF_PROCESSES = 10
 
-    inputs = __get_cartesian_product_of_inputs(random_graph_instances_train, p_params, optimizers,
-                                               num_of_starting_points)
+    inputs_random = __get_cartesian_product_of_inputs(random_graph_instances_train, p_params, optimizers,
+                                                      num_of_starting_points)
+    inputs_ladder = __get_cartesian_product_of_inputs(ladder_graph_instances_train, p_params, optimizers,
+                                                      num_of_starting_points)
+    inputs_caveman = __get_cartesian_product_of_inputs(caveman_graph_instances_cliques_train, p_params, optimizers,
+                                                       num_of_starting_points)
+    inputs_barbell = __get_cartesian_product_of_inputs(barbell_graph_instances_train, p_params, optimizers,
+                                                       num_of_starting_points)
+
+    inputs = itertools.chain(inputs_random)
 
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
         results = pool.starmap(worker, inputs)
