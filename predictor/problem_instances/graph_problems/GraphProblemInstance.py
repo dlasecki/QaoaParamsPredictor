@@ -1,6 +1,7 @@
 from qiskit.aqua.algorithms import NumPyMinimumEigensolver
 from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.operators.legacy import op_converter
+from qiskit.optimization.applications.ising.common import sample_most_likely
 
 
 class ProblemInstance:
@@ -22,3 +23,9 @@ class ProblemInstance:
         self.most_likely_binary_solution = most_likely_binary_solution
         self.most_likely_solution_value = most_likely_solution_value
         self.classical_solution_value = classical_solution_value
+
+    def get_classical_most_likely_binary_solution(self):
+        numpy_minimum_eigensolver = NumPyMinimumEigensolver(self.qubit_operator)
+        result = numpy_minimum_eigensolver.compute_minimum_eigenvalue()
+
+        return sample_most_likely(result.eigenstate)

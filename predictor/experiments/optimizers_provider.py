@@ -12,5 +12,6 @@ def get_lbfgs_optimizer():
 def get_nelder_mead_optimizer():
     return NELDER_MEAD()
 
+
 def get_spsa_optimizer():
     return SPSA()
