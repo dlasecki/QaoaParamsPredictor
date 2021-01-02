@@ -1,3 +1,4 @@
+from qiskit.aqua.algorithms import NumPyMinimumEigensolver
 from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.operators.legacy import op_converter
 
@@ -6,7 +7,7 @@ class ProblemInstance:
 
     def __init__(self, problem_name, p, input_graph, weight_matrix, optimizer, num_starting_points, optimal_params,
                  min_value, qubit_operator: WeightedPauliOperator, offset, most_likely_binary_solution,
-                 most_likely_solution_value):
+                 most_likely_solution_value, classical_solution_value):
         self.problem_name = problem_name
         self.p = p
         self.input_graph = input_graph
@@ -20,3 +21,4 @@ class ProblemInstance:
         self.hamiltonian_matrix = op_converter.to_matrix_operator(qubit_operator).matrix
         self.most_likely_binary_solution = most_likely_binary_solution
         self.most_likely_solution_value = most_likely_solution_value
+        self.classical_solution_value = classical_solution_value

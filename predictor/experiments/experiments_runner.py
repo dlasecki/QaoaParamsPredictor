@@ -2,6 +2,8 @@ import itertools
 import multiprocessing
 import time
 
+from qiskit.aqua.algorithms import NumPyMinimumEigensolver
+
 from experiments import optimizers_provider, results_serializer
 from instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
     generate_barbell_graph_instances, generate_random_graph_instances, generate_caveman_graph_instances
@@ -63,7 +65,7 @@ if __name__ == '__main__':
     inputs_barbell = __get_cartesian_product_of_inputs(barbell_graph_instances_train, p_params, optimizers,
                                                        num_of_starting_points)
 
-    inputs = itertools.chain(inputs_random)
+    inputs = itertools.chain(inputs_random, inputs_ladder, inputs_caveman, inputs_barbell)
 
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
         results = pool.starmap(worker, inputs)

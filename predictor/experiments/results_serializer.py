@@ -26,4 +26,4 @@ def __create_result(problem_instance: ProblemInstance):
                   complex_ndarray_to_list.complex_ndarray_to_list(problem_instance.hamiltonian_matrix),
                   problem_instance.weight_matrix.tolist(), problem_instance.optimal_params.tolist(),
                   problem_instance.min_value, problem_instance.most_likely_binary_solution.tolist(),
-                  problem_instance.most_likely_solution_value)
+                  problem_instance.most_likely_solution_value, problem_instance.classical_solution_value.tolist())
