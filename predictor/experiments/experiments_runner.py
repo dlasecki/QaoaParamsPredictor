@@ -27,8 +27,10 @@ def __get_cartesian_product_of_inputs(graph_instances_train_operators, p_params,
 if __name__ == '__main__':
     start = time.perf_counter()
     p_params = [1, 2, 3, 4]
-    #p_params = [1]
+    # p_params = [1]
     optimizers = [optimizers_provider.get_cobyla_optimizer()]
+    # optimizers = [optimizers_provider.get_cobyla_optimizer(), optimizers_provider.get_spsa_optimizer(),
+    #               optimizers_provider.get_lbfgs_optimizer(), optimizers_provider.get_nelder_mead_optimizer()]
     num_of_starting_points = [10]
 
     random_graph_num_of_vertices_train = [8]
