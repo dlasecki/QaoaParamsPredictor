@@ -14,16 +14,10 @@ def save_to_json(directory: str, data: ProblemInstance):
         json.dump(result.__dict__, outfile)
 
 
-def read_from_json(directory: str, file_name: str):
-    path = directory + "\\" + file_name
-    with open(path) as json_file:
-        json_object = json.load(json_file)
-    return json_object
-
-
 def __create_result(problem_instance: ProblemInstance):
     return Result(problem_instance.problem_name,
                   complex_ndarray_to_list.complex_ndarray_to_list(problem_instance.hamiltonian_matrix),
                   problem_instance.weight_matrix.tolist(), problem_instance.optimal_params.tolist(),
                   problem_instance.min_value, problem_instance.most_likely_binary_solution.tolist(),
-                  problem_instance.most_likely_solution_value, problem_instance.classical_solution_value.tolist())
+                  problem_instance.most_likely_solution_value, problem_instance.classical_solution_value.tolist(),
+                  [np_array.tolist() for np_array in problem_instance.good_params])

@@ -11,7 +11,7 @@ from qaoa_solver import qaoa
 
 def worker(input_graph, p_param, optimizer, initial_points_num):
     problem_instance = MaxCutProblemInstance(p_param, input_graph, optimizer,
-                                             initial_points_num) #TODO support other problems
+                                             initial_points_num)  # TODO support other problems
     qaoa_res = qaoa.qaoa(problem_instance)
     results_serializer.save_to_json('output', qaoa_res)
 

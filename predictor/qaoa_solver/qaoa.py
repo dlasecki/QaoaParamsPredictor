@@ -22,10 +22,14 @@ def qaoa(problem_instance: ProblemInstance):
         if __is_solution_better(min_cost, qaoa_object):
             min_cost, qaoa_object_min_cost = __get_updated_solution(qaoa_object)
 
+        if __is_solution_high_quality(problem_instance, qaoa_object):
+            problem_instance.good_params.append(qaoa_object.optimal_params)
+
     most_likely_binary_solution = sample_most_likely(qaoa_object_min_cost.compute_minimum_eigenvalue().eigenstate)
     most_likely_solution_value = max_cut.max_cut_value(most_likely_binary_solution, problem_instance.weight_matrix)
     problem_instance = __get_instance_with_best_solution(problem_instance, min_cost,
-                                                         qaoa_object_min_cost.optimal_params, most_likely_binary_solution,
+                                                         qaoa_object_min_cost.optimal_params,
+                                                         most_likely_binary_solution,
                                                          most_likely_solution_value)
 
     return problem_instance
@@ -47,3 +51,14 @@ def __get_instance_with_best_solution(problem_instance: ProblemInstance, min_cos
     problem_instance.most_likely_solution_value = most_likely_solution_value
 
     return problem_instance
+
+
+def __is_solution_high_quality(problem_instance: ProblemInstance, qaoa_object):
+    most_likely_binary_solution = sample_most_likely(qaoa_object.compute_minimum_eigenvalue().eigenstate)
+    most_likely_solution_value = max_cut.max_cut_value(most_likely_binary_solution, problem_instance.weight_matrix)
+
+    allowed_approximation_error = 0.01  # 1% approximation error
+    optimality_ratio = most_likely_solution_value / problem_instance.classical_solution_value
+    approximation_error = optimality_ratio - 1.0
+
+    return approximation_error <= allowed_approximation_error

@@ -1,6 +1,8 @@
 from qiskit.aqua.algorithms import NumPyMinimumEigensolver
 from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.operators.legacy import op_converter
+from qiskit.optimization import QuadraticProgram
+from qiskit.optimization.algorithms import MinimumEigenOptimizer
 from qiskit.optimization.applications.ising.common import sample_most_likely
 
 
@@ -8,7 +10,7 @@ class ProblemInstance:
 
     def __init__(self, problem_name, p, input_graph, weight_matrix, optimizer, num_starting_points, optimal_params,
                  min_value, qubit_operator: WeightedPauliOperator, offset, most_likely_binary_solution,
-                 most_likely_solution_value, classical_solution_value):
+                 most_likely_solution_value, classical_solution_value, good_params):
         self.problem_name = problem_name
         self.p = p
         self.input_graph = input_graph
@@ -23,9 +25,14 @@ class ProblemInstance:
         self.most_likely_binary_solution = most_likely_binary_solution
         self.most_likely_solution_value = most_likely_solution_value
         self.classical_solution_value = classical_solution_value
+        self.good_params = good_params
 
-    def get_classical_most_likely_binary_solution(self):
-        numpy_minimum_eigensolver = NumPyMinimumEigensolver(self.qubit_operator)
-        result = numpy_minimum_eigensolver.compute_minimum_eigenvalue()
+    def get_classical_exact_binary_solution(self):
+        # numpy_minimum_eigensolver = NumPyMinimumEigensolver(self.qubit_operator)
+        # result = numpy_minimum_eigensolver.compute_minimum_eigenvalue()
 
-        return sample_most_likely(result.eigenstate)
+        qp = QuadraticProgram()
+        qp.from_ising(self.qubit_operator, self.offset)
+        exact = MinimumEigenOptimizer(NumPyMinimumEigensolver())
+        result = exact.solve(qp)
+        return result.x
