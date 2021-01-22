@@ -1,6 +1,6 @@
 import json
 
-from converters import complex_ndarray_to_list
+from helpers.converters import complex_ndarray_to_list
 from problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 from problem_instances.Result import Result
 
