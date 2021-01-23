@@ -2,11 +2,13 @@ import itertools
 import multiprocessing
 import time
 
-from experiments import optimizers_provider, results_serializer
-from helpers.enums.ProblemName import ProblemName
-from problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
 from problem_instances.instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
     generate_barbell_graph_instances, generate_random_graph_instances, generate_caveman_graph_instances
+
+from experiments import optimizers_factory
+from experiments.data_handlers import results_serializer
+from helpers.enums.ProblemName import ProblemName
+from problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
 from qaoa_solver import qaoa
 
 
@@ -74,7 +76,7 @@ if __name__ == '__main__':
     p_params = [1, 2, 3, 4]
     problems = [ProblemName.MAX_CUT]
     NUM_OF_PROCESSES = 8
-    optimizers = [optimizers_provider.get_cobyla_optimizer()]
+    optimizers = [optimizers_factory.get_cobyla_optimizer()]
 
     inputs_random = __get_cartesian_product_of_inputs(problems, get_random_graphs_train_instances(), p_params,
                                                       optimizers, num_of_starting_points)

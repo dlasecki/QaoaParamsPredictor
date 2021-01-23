@@ -1,20 +1,17 @@
-import os
 import pathlib
 from os import listdir
 from os.path import isfile, join
 
-from experiments import json_reader
+from experiments.data_handlers import json_reader
 from helpers.enums.OptimizerName import OptimizerName
 
 
 def load_jsons(directory: str, optimizer_name: OptimizerName, p: int):
     fn = pathlib.Path(__file__).parent.parent
-    print(fn)
     directory = str(fn) + directory
     all_file_names = __get_all_file_names(directory)
     relevant_file_names = __get_relevant_file_names(all_file_names, optimizer_name, p)
     jsons_list = []
-    print(relevant_file_names)
     for file_name in relevant_file_names:
         json = json_reader.read_from_json(directory, file_name)
         jsons_list.append(json)
