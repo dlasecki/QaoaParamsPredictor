@@ -2,18 +2,21 @@ import itertools
 import multiprocessing
 import time
 
-from problem_instances.instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
-    generate_barbell_graph_instances, generate_random_graph_instances, generate_caveman_graph_instances
-
-from experiments import optimizers_factory
 from experiments.data_handlers import results_serializer
+from experiments.optimizers import optimizers_factory
+from helpers.enums.OptimizerName import OptimizerName
 from helpers.enums.ProblemName import ProblemName
 from problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
+from problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
+    generate_random_graph_instances, generate_ladder_graph_instances, generate_caveman_graph_instances, \
+    generate_barbell_graph_instances
 from qaoa_solver import qaoa
 
 
 def worker(problem_name, input_graph, p_param, optimizer, initial_points_num):
-    problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer, initial_points_num)
+    optimizer_instance = optimizers_factory.create_optimizer(optimizer)
+    problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer_instance,
+                                                     initial_points_num)
     qaoa_res = qaoa.qaoa(problem_instance)
     directory = "output\\" + problem_name.value + "\\" + problem_instance.input_graph.graph["graph_type"].value
     results_serializer.save_to_json(directory, qaoa_res)
@@ -73,10 +76,10 @@ def get_barbell_graphs_test_instances():
 if __name__ == '__main__':
     start = time.perf_counter()
     num_of_starting_points = [10]
-    p_params = [1, 2, 3, 4]
+    p_params = [1]
     problems = [ProblemName.MAX_CUT]
     NUM_OF_PROCESSES = 8
-    optimizers = [optimizers_factory.get_cobyla_optimizer()]
+    optimizers = [OptimizerName.COBYLA]
 
     inputs_random = __get_cartesian_product_of_inputs(problems, get_random_graphs_train_instances(), p_params,
                                                       optimizers, num_of_starting_points)

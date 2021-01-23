@@ -1,6 +1,6 @@
 import problem_instances.instances_generator.graphs_builder as gg
 
-from experiments import optimizers_factory
+from experiments.optimizers import optimizers_factory
 from problem_instances.graph_problems.specializations.MaxCutProblemInstance import MaxCutProblemInstance
 from qaoa_solver.qaoa import qaoa
 

@@ -16,7 +16,7 @@ def qaoa(problem_instance: ProblemInstance):
 
     for _ in range(problem_instance.num_starting_points):
         qaoa_object = QAOA(operator=problem_instance.qubit_operator, p=problem_instance.p,
-                           optimizer=problem_instance.optimizer)
+                           optimizer=problem_instance.optimizer.optimizer)
         qaoa_object.run(quantum_instance)
 
         if __is_solution_better(min_cost, qaoa_object):

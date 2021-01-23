@@ -1,4 +1,4 @@
-from problem_instances.instances_generator import graphs_builder
+from problem_instances.instances_generators.graph_problems import graphs_builder
 
 
 def generate_ladder_graph_instances(ladder_graph_num_of_vertices):
