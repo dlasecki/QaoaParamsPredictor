@@ -1,9 +1,9 @@
 import json
-from datetime import date, datetime
+from datetime import datetime
 
 from helpers.converters import complex_ndarray_to_list
-from problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 from problem_instances.Result import Result
+from problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 
 
 def save_to_json(directory: str, data: ProblemInstance):
