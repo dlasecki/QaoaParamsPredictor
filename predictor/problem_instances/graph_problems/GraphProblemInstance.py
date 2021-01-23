@@ -3,12 +3,13 @@ from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.operators.legacy import op_converter
 from qiskit.optimization import QuadraticProgram
 from qiskit.optimization.algorithms import MinimumEigenOptimizer
-from qiskit.optimization.applications.ising.common import sample_most_likely
+
+from helpers.enums.ProblemName import ProblemName
 
 
 class ProblemInstance:
 
-    def __init__(self, problem_name, p, input_graph, weight_matrix, optimizer, num_starting_points, optimal_params,
+    def __init__(self, problem_name: ProblemName, p, input_graph, weight_matrix, optimizer, num_starting_points, optimal_params,
                  min_value, qubit_operator: WeightedPauliOperator, offset, most_likely_binary_solution,
                  most_likely_solution_value, classical_solution_value, good_params):
         self.problem_name = problem_name

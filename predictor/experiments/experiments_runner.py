@@ -3,24 +3,25 @@ import multiprocessing
 import time
 
 from experiments import optimizers_provider, results_serializer
+from helpers.enums.ProblemName import ProblemName
+from problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
 from problem_instances.instances_generator.graphs_instances_generator import generate_ladder_graph_instances, \
     generate_barbell_graph_instances, generate_random_graph_instances, generate_caveman_graph_instances
-from problem_instances.graph_problems.specializations.MaxCutProblemInstance import MaxCutProblemInstance
 from qaoa_solver import qaoa
 
 
-def worker(input_graph, p_param, optimizer, initial_points_num):
-    problem_instance = MaxCutProblemInstance(p_param, input_graph, optimizer,
-                                             initial_points_num)  # TODO support other problems
+def worker(problem_name, input_graph, p_param, optimizer, initial_points_num):
+    problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer, initial_points_num)
     qaoa_res = qaoa.qaoa(problem_instance)
-    directory = "output\\max_cut\\"+problem_instance.input_graph.graph["graph_type"]
+    directory = "output\\" + problem_name.value + "\\" + problem_instance.input_graph.graph["graph_type"].value
     results_serializer.save_to_json(directory, qaoa_res)
 
     return qaoa_res.optimal_params, qaoa_res.min_value
 
 
-def __get_cartesian_product_of_inputs(graph_instances_train_operators, p_params, optimizers, initial_points_num):
-    return itertools.product(graph_instances_train_operators, p_params, optimizers, initial_points_num)
+def __get_cartesian_product_of_inputs(problems, graph_instances_train_operators, p_params, optimizers,
+                                      initial_points_num):
+    return itertools.product(problems, graph_instances_train_operators, p_params, optimizers, initial_points_num)
 
 
 def get_random_graphs_train_instances():
@@ -70,18 +71,19 @@ def get_barbell_graphs_test_instances():
 if __name__ == '__main__':
     start = time.perf_counter()
     num_of_starting_points = [10]
-    p_params = [1]
+    p_params = [1, 2, 3, 4]
+    problems = [ProblemName.MAX_CUT]
     NUM_OF_PROCESSES = 8
     optimizers = [optimizers_provider.get_cobyla_optimizer()]
 
-    inputs_random = __get_cartesian_product_of_inputs(get_random_graphs_train_instances(), p_params, optimizers,
-                                                      num_of_starting_points)
-    inputs_ladder = __get_cartesian_product_of_inputs(get_ladder_graphs_train_instances(), p_params, optimizers,
-                                                      num_of_starting_points)
-    inputs_caveman = __get_cartesian_product_of_inputs(get_caveman_graphs_train_instances(), p_params, optimizers,
-                                                       num_of_starting_points)
-    inputs_barbell = __get_cartesian_product_of_inputs(get_barbell_graphs_train_instances(), p_params, optimizers,
-                                                       num_of_starting_points)
+    inputs_random = __get_cartesian_product_of_inputs(problems, get_random_graphs_train_instances(), p_params,
+                                                      optimizers, num_of_starting_points)
+    inputs_ladder = __get_cartesian_product_of_inputs(problems, get_ladder_graphs_train_instances(), p_params,
+                                                      optimizers, num_of_starting_points)
+    inputs_caveman = __get_cartesian_product_of_inputs(problems, get_caveman_graphs_train_instances(), p_params,
+                                                       optimizers, num_of_starting_points)
+    inputs_barbell = __get_cartesian_product_of_inputs(problems, get_barbell_graphs_train_instances(), p_params,
+                                                       optimizers, num_of_starting_points)
     inputs = itertools.chain(inputs_random)
 
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
