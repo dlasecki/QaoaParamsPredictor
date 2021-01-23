@@ -13,7 +13,8 @@ def worker(input_graph, p_param, optimizer, initial_points_num):
     problem_instance = MaxCutProblemInstance(p_param, input_graph, optimizer,
                                              initial_points_num)  # TODO support other problems
     qaoa_res = qaoa.qaoa(problem_instance)
-    results_serializer.save_to_json('output', qaoa_res)
+    directory = "output\\max_cut\\"+problem_instance.input_graph.graph["graph_type"]
+    results_serializer.save_to_json(directory, qaoa_res)
 
     return qaoa_res.optimal_params, qaoa_res.min_value
 
@@ -69,7 +70,7 @@ def get_barbell_graphs_test_instances():
 if __name__ == '__main__':
     start = time.perf_counter()
     num_of_starting_points = [10]
-    p_params = [1, 2, 3, 4]
+    p_params = [1]
     NUM_OF_PROCESSES = 8
     optimizers = [optimizers_provider.get_cobyla_optimizer()]
 
@@ -81,7 +82,7 @@ if __name__ == '__main__':
                                                        num_of_starting_points)
     inputs_barbell = __get_cartesian_product_of_inputs(get_barbell_graphs_train_instances(), p_params, optimizers,
                                                        num_of_starting_points)
-    inputs = itertools.chain(inputs_random, inputs_ladder, inputs_caveman, inputs_barbell)
+    inputs = itertools.chain(inputs_random)
 
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
         results = pool.starmap(worker, inputs)

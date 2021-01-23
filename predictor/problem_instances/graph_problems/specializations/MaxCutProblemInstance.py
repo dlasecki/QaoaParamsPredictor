@@ -1,6 +1,7 @@
 from qiskit.optimization.applications.ising import max_cut
 
 import problem_instances.instances_generator.graph_weight_matrix_calculator
+from helpers.enums.ProblemName import ProblemName
 from problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 
 
@@ -11,7 +12,7 @@ class MaxCutProblemInstance(ProblemInstance):
         self.weight_operator = problem_instances.instances_generator.graph_weight_matrix_calculator.get_weight_matrix(
             input_graph)
         self.qubit_operator, self.offset = max_cut.get_operator(self.weight_operator)
-        super().__init__("MaxCut", p, input_graph, self.weight_operator, optimizer, num_starting_points,
+        super().__init__(ProblemName.MAX_CUT.value, p, input_graph, self.weight_operator, optimizer, num_starting_points,
                          optimal_params, min_value, self.qubit_operator, self.offset, most_likely_binary_solution,
                          most_likely_solution_value, self.__get_classical_solution(), good_params)
 

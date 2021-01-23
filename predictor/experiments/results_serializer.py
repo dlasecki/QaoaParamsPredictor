@@ -1,4 +1,5 @@
 import json
+from datetime import date, datetime
 
 from helpers.converters import complex_ndarray_to_list
 from problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
@@ -6,8 +7,10 @@ from problem_instances.Result import Result
 
 
 def save_to_json(directory: str, data: ProblemInstance):
-    file_name = data.problem_name + data.input_graph.graph["graph_type"] + str(
-        data.input_graph.graph["graph_id"]) + "p=" + str(data.p)
+    date_time_obj = datetime.now()
+    timestamp_str = date_time_obj.strftime("%d-%b-%Y-%H-%M-%S.%f)")
+    file_name = data.problem_name + "_" + data.input_graph.graph["graph_type"] + "_" + str(
+        data.input_graph.graph["graph_id"]) + "_" + "p=" + str(data.p) + "_" + timestamp_str
     result = __create_result(data)
     with open(directory + "\\" + file_name + ".json", 'w') as outfile:
         print(outfile)
