@@ -1,6 +1,7 @@
 from qiskit.optimization.applications.ising import max_cut
 
 from experiments.optimizers.Optimizer import Optimizer
+from experiments.quadratic_solver import get_classical_exact_binary_solution
 from helpers.enums.ProblemName import ProblemName
 from problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 from problem_instances.instances_generators.graph_problems import graph_weight_matrix_calculator
@@ -17,5 +18,5 @@ class MaxCutProblemInstance(ProblemInstance):
                          most_likely_solution_value, self.__get_classical_solution(), good_params)
 
     def __get_classical_solution(self):
-        x = self.get_classical_exact_binary_solution()
+        x = get_classical_exact_binary_solution(self.qubit_operator, self.offset)
         return max_cut.max_cut_value(x, self.weight_operator)

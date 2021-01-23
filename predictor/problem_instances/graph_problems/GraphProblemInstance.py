@@ -1,8 +1,5 @@
-from qiskit.aqua.algorithms import NumPyMinimumEigensolver
 from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.operators.legacy import op_converter
-from qiskit.optimization import QuadraticProgram
-from qiskit.optimization.algorithms import MinimumEigenOptimizer
 
 from experiments.optimizers.Optimizer import Optimizer
 from helpers.enums.ProblemName import ProblemName
@@ -29,11 +26,3 @@ class ProblemInstance:
         self.most_likely_solution_value = most_likely_solution_value
         self.classical_solution_value = classical_solution_value
         self.good_params = good_params
-
-    def get_classical_exact_binary_solution(self):
-
-        qp = QuadraticProgram()
-        qp.from_ising(self.qubit_operator, self.offset)
-        exact = MinimumEigenOptimizer(NumPyMinimumEigensolver())
-        result = exact.solve(qp)
-        return result.x
