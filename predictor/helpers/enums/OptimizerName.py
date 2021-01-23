@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class OptimizerName(Enum):
-    COBYLA = "Cobyla"
-    LBFGS = "Lbfgs"
-    SPSA = "Spsa"
-    NELDER_MEAD = "NelderMead"
+    COBYLA = "cobyla"
+    LBFGS = "lbfgs"
+    SPSA = "spsa"
+    NELDER_MEAD = "nelder_mead"
