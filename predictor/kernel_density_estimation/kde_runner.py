@@ -1,8 +1,8 @@
 from sklearn.neighbors import KernelDensity
 
-from data_loader import load_jsons
 from helpers.enums.OptimizerName import OptimizerName
 from kde_matrix_builder import build_kde_parameters_matrix
+from kernel_density_estimation.data_handlers.data_loader import load_jsons
 
 if __name__ == '__main__':
     PATH = "/experiments/output/max_cut/random"
