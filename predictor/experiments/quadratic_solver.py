@@ -3,7 +3,7 @@ from qiskit.optimization import QuadraticProgram
 from qiskit.optimization.algorithms import MinimumEigenOptimizer
 
 
-def get_classical_exact_binary_solution(qubit_operator, offset):
+def get_exact_classical_binary_solution(qubit_operator, offset):
     qp = QuadraticProgram()
     qp.from_ising(qubit_operator, offset)
     exact = MinimumEigenOptimizer(NumPyMinimumEigensolver())

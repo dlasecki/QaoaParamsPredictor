@@ -18,10 +18,15 @@ def worker(problem_name, input_graph, p_param, optimizer, initial_points_num):
     problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer_instance,
                                                      initial_points_num)
     qaoa_res = qaoa.qaoa(problem_instance)
-    directory = "output\\" + problem_name.value + "\\" + problem_instance.input_graph.graph["graph_type"].value
+    directory = __build_problem_instance_directory(problem_instance, problem_name)
     results_serializer.save_to_json(directory, qaoa_res)
 
     return qaoa_res.optimal_params, qaoa_res.min_value
+
+
+def __build_problem_instance_directory(problem_instance, problem_name):
+    directory = "output\\" + problem_name.value + "\\" + problem_instance.input_graph.graph["graph_type"].value
+    return directory
 
 
 def __get_cartesian_product_of_inputs(problems, graph_instances_train_operators, p_params, optimizers,
@@ -94,6 +99,5 @@ if __name__ == '__main__':
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
         results = pool.starmap(worker, inputs)
 
-    print(results)
     end = time.perf_counter()
     print(str(end - start) + " seconds")
