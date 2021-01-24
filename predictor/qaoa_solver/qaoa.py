@@ -1,3 +1,7 @@
+from math import pi
+
+from numpy import concatenate
+from numpy.random.mtrand import uniform
 from qiskit import Aer
 from qiskit.aqua import QuantumInstance
 from qiskit.aqua.algorithms import QAOA
@@ -12,35 +16,32 @@ def qaoa(problem_instance: ProblemInstance):
     quantum_instance = QuantumInstance(backend)
 
     min_cost = None
-    qaoa_object_min_cost = None
-
+    result_min_cost = None
+    all_results = []
     for _ in range(problem_instance.num_starting_points):
         qaoa_object = QAOA(operator=problem_instance.qubit_operator, p=problem_instance.p,
-                           optimizer=problem_instance.optimizer.optimizer)
-        qaoa_object.run(quantum_instance)
-
-        if __is_solution_better(min_cost, qaoa_object):
-            min_cost, qaoa_object_min_cost = __get_updated_solution(qaoa_object)
-
-        if __is_solution_high_quality(problem_instance, qaoa_object):
-            problem_instance.good_params.append(qaoa_object.optimal_params)
-
-    most_likely_binary_solution = sample_most_likely(qaoa_object_min_cost.compute_minimum_eigenvalue().eigenstate)
+                           optimizer=problem_instance.optimizer.optimizer,
+                           initial_point=concatenate([uniform(low=0.0, high=2 * pi, size=problem_instance.p),
+                                                      uniform(low=0.0, high=pi, size=problem_instance.p)]))
+        result = qaoa_object.run(quantum_instance)
+        qaoa_expectation = result['eigenvalue'].real + problem_instance.offset
+        all_results.append(result)
+        if __is_solution_better(min_cost, qaoa_expectation):
+            min_cost, result_min_cost = qaoa_expectation, result
+    high_quality_solutions_params = __get_high_quality_solutions(all_results, result_min_cost, problem_instance.offset)
+    problem_instance.good_params = high_quality_solutions_params
+    most_likely_binary_solution = sample_most_likely(result_min_cost['eigenstate'])
     most_likely_solution_value = max_cut.max_cut_value(most_likely_binary_solution, problem_instance.weight_matrix)
-    problem_instance = __get_instance_with_best_solution(problem_instance, min_cost,
-                                                         qaoa_object_min_cost.optimal_params,
+    problem_instance = __get_instance_with_best_solution(problem_instance, -min_cost,
+                                                         result_min_cost['optimal_point'],
                                                          most_likely_binary_solution,
                                                          most_likely_solution_value)
 
     return problem_instance
 
 
-def __is_solution_better(min_cost, qaoa_object):
-    return not min_cost or qaoa_object.get_optimal_cost() < min_cost
-
-
-def __get_updated_solution(qaoa_object):
-    return qaoa_object.get_optimal_cost(), qaoa_object
+def __is_solution_better(min_cost, qaoa_expectation):
+    return not min_cost or qaoa_expectation < min_cost
 
 
 def __get_instance_with_best_solution(problem_instance: ProblemInstance, min_cost, optimal_params,
@@ -53,12 +54,15 @@ def __get_instance_with_best_solution(problem_instance: ProblemInstance, min_cos
     return problem_instance
 
 
-def __is_solution_high_quality(problem_instance: ProblemInstance, qaoa_object):
-    most_likely_binary_solution = sample_most_likely(qaoa_object.compute_minimum_eigenvalue().eigenstate)
-    most_likely_solution_value = max_cut.max_cut_value(most_likely_binary_solution, problem_instance.weight_matrix)
-
+def __get_high_quality_solutions(all_results, best_result, offset):
+    high_quality_solutions_params = []
+    best_objective_value = best_result['eigenvalue'].real + offset
     allowed_approximation_error = 0.01  # 1% approximation error
-    optimality_ratio = most_likely_solution_value / problem_instance.classical_solution_value
-    approximation_error = optimality_ratio - 1.0
+    for solution in all_results:
+        solution_objective_value = solution['eigenvalue'].real + offset
+        optimality_ratio = solution_objective_value / best_objective_value
+        approximation_error = 1 - optimality_ratio
+        if allowed_approximation_error >= approximation_error >= 0.0:
+            high_quality_solutions_params.append(solution['optimal_point'])
 
-    return approximation_error <= allowed_approximation_error
+    return high_quality_solutions_params
