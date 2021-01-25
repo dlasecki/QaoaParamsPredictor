@@ -20,7 +20,8 @@ def __create_result(problem_instance: ProblemInstance):
                   problem_instance.weight_matrix.tolist(), problem_instance.optimal_params.tolist(),
                   problem_instance.min_value, problem_instance.most_likely_binary_solution.tolist(),
                   problem_instance.most_likely_solution_value, problem_instance.classical_solution_value.tolist(),
-                  [np_array.tolist() for np_array in problem_instance.good_params])
+                  [np_array.tolist() for np_array in problem_instance.good_params],
+                  problem_instance.input_graph.graph["graph_type"].value)
 
 
 def __create_problem_instance_file_name(problem_instance: ProblemInstance):
