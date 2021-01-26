@@ -1,7 +1,7 @@
 from sklearn.neighbors import KernelDensity
 
 from kernel_density_estimation.KdeModel import KdeModel
-from kernel_density_estimation.jsons_validator import validate_json_list_not_empty, validate_jsons, \
+from kernel_density_estimation.data_handlers.jsons_validator import validate_json_list_not_empty, validate_jsons, \
     __get_model_metadata
 from kernel_density_estimation.kde_matrix_builder import build_kde_parameters_matrix
 
