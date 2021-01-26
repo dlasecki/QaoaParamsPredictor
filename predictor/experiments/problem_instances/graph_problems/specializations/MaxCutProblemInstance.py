@@ -9,12 +9,13 @@ from helpers.enums.ProblemName import ProblemName
 
 class MaxCutProblemInstance(ProblemInstance):
 
-    def __init__(self, p, input_graph, optimizer: Optimizer, num_starting_points, optimal_params=None, min_value=None,
+    def __init__(self, p, input_graph, optimizer: Optimizer, num_starting_points, optimal_params=None,
+                 optimal_value=None,
                  most_likely_binary_solution=None, most_likely_solution_value=None, good_params=[]):
         self.weight_operator = graph_weight_matrix_calculator.get_weight_matrix(input_graph)
         self.qubit_operator, self.offset = max_cut.get_operator(self.weight_operator)
         super().__init__(ProblemName.MAX_CUT, p, input_graph, self.weight_operator, optimizer, num_starting_points,
-                         optimal_params, min_value, self.qubit_operator, self.offset, most_likely_binary_solution,
+                         optimal_params, optimal_value, self.qubit_operator, self.offset, most_likely_binary_solution,
                          most_likely_solution_value, self.__get_classical_solution(), good_params)
 
     def __get_classical_solution(self):

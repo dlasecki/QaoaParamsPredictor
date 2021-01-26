@@ -11,7 +11,7 @@ from qiskit.optimization.applications.ising.common import sample_most_likely
 from experiments.problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 
 
-def qaoa(problem_instance: ProblemInstance):
+def qaoa_with_optimizer(problem_instance: ProblemInstance):
     backend = Aer.get_backend('statevector_simulator')
     quantum_instance = QuantumInstance(backend)
 
@@ -19,16 +19,14 @@ def qaoa(problem_instance: ProblemInstance):
     result_min_cost = None
     all_results = []
     for _ in range(problem_instance.num_starting_points):
-        qaoa_object = QAOA(operator=problem_instance.qubit_operator, p=problem_instance.p,
-                           optimizer=problem_instance.optimizer.optimizer,
-                           initial_point=__generate_uniformly_random_parameters(problem_instance.p))
-        result = qaoa_object.run(quantum_instance)
+        result = qaoa(quantum_instance, problem_instance.qubit_operator, problem_instance.p,
+                      __generate_uniformly_random_parameters(problem_instance.p), problem_instance.optimizer.optimizer)
         qaoa_expectation = result['eigenvalue'].real + problem_instance.offset
         all_results.append(result)
         if __is_solution_better(min_cost, qaoa_expectation):
             min_cost, result_min_cost = qaoa_expectation, result
-    high_quality_solutions_params = __get_high_quality_solutions(all_results, result_min_cost, problem_instance.offset)
-    problem_instance.good_params = high_quality_solutions_params
+
+    problem_instance.good_params = __get_high_quality_solutions(all_results, result_min_cost, problem_instance.offset)
     most_likely_binary_solution = sample_most_likely(result_min_cost['eigenstate'])
     most_likely_solution_value = max_cut.max_cut_value(most_likely_binary_solution, problem_instance.weight_matrix)
     problem_instance = __get_instance_with_best_solution(problem_instance, -min_cost,
@@ -37,6 +35,11 @@ def qaoa(problem_instance: ProblemInstance):
                                                          most_likely_solution_value)
 
     return problem_instance
+
+
+def qaoa(quantum_instance, qubit_operator, p, initial_point, optimizer=None):
+    qaoa_object = QAOA(operator=qubit_operator, p=p, initial_point=initial_point, optimizer=optimizer)
+    return qaoa_object.run(quantum_instance)
 
 
 def __generate_uniformly_random_parameters(p: int):
@@ -49,7 +52,7 @@ def __is_solution_better(min_cost, qaoa_expectation):
 
 def __get_instance_with_best_solution(problem_instance: ProblemInstance, min_cost, optimal_params,
                                       most_likely_binary_solution, most_likely_solution_value):
-    problem_instance.min_value = min_cost
+    problem_instance.optimal_value = min_cost
     problem_instance.optimal_params = optimal_params
     problem_instance.most_likely_binary_solution = most_likely_binary_solution
     problem_instance.most_likely_solution_value = most_likely_solution_value

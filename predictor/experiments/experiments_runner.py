@@ -17,11 +17,11 @@ def worker(problem_name, input_graph, p_param, optimizer, initial_points_num):
     optimizer_instance = optimizers_factory.create_optimizer(optimizer)
     problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer_instance,
                                                      initial_points_num)
-    qaoa_res = qaoa.qaoa(problem_instance)
+    qaoa_res = qaoa.qaoa_with_optimizer(problem_instance)
     directory = __build_problem_instance_directory(problem_instance, problem_name)
     results_serializer.save_to_json(directory, qaoa_res)
 
-    return qaoa_res.optimal_params, qaoa_res.min_value
+    return qaoa_res.optimal_params, qaoa_res.optimal_value
 
 
 def __build_problem_instance_directory(problem_instance, problem_name):
@@ -80,7 +80,7 @@ def get_barbell_graphs_test_instances():
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    num_of_starting_points = [10]
+    num_of_starting_points = [5]
     p_params = [1]
     problems = [ProblemName.MAX_CUT]
     NUM_OF_PROCESSES = 8

@@ -2,7 +2,7 @@ import problem_instances.instances_generator.graphs_builder as gg
 
 from experiments.optimizers import optimizers_factory
 from experiments.problem_instances.graph_problems.specializations.MaxCutProblemInstance import MaxCutProblemInstance
-from qaoa_solver.qaoa import qaoa
+from qaoa_solver.qaoa import qaoa_with_optimizer
 
 
 def test_run_qaoa():
@@ -13,6 +13,6 @@ def test_run_qaoa():
     num_starting_points = 1
 
     problem_instance = MaxCutProblemInstance(problem_id, p, input_graph, optimizer, num_starting_points)
-    result = qaoa(problem_instance)
+    result = qaoa_with_optimizer(problem_instance)
 
-    assert isinstance(result.min_value, float), "Optimal value not a float."
+    assert isinstance(result.optimal_value, float), "Optimal value not a float."
