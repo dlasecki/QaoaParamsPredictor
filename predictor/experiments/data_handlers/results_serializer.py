@@ -1,9 +1,9 @@
 import json
 from datetime import datetime
 
+from experiments.problem_instances.Result import Result
+from experiments.problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 from helpers.converters import complex_ndarray_to_list
-from problem_instances.Result import Result
-from problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
 
 
 def save_to_json(directory: str, problem_instance: ProblemInstance):
@@ -16,12 +16,12 @@ def save_to_json(directory: str, problem_instance: ProblemInstance):
 
 def __create_result(problem_instance: ProblemInstance):
     return Result(problem_instance.problem_name.value, problem_instance.optimizer.optimizer_name.value,
-                  complex_ndarray_to_list.complex_ndarray_to_list(problem_instance.hamiltonian_matrix),
+                  complex_ndarray_to_list.complex_ndarray_to_matrix(problem_instance.hamiltonian_matrix),
                   problem_instance.weight_matrix.tolist(), problem_instance.optimal_params.tolist(),
                   problem_instance.min_value, problem_instance.most_likely_binary_solution.tolist(),
                   problem_instance.most_likely_solution_value, problem_instance.classical_solution_value.tolist(),
                   [np_array.tolist() for np_array in problem_instance.good_params],
-                  problem_instance.input_graph.graph["graph_type"].value)
+                  problem_instance.input_graph.graph["graph_type"].value, problem_instance.p)
 
 
 def __create_problem_instance_file_name(problem_instance: ProblemInstance):

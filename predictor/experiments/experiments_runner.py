@@ -4,12 +4,12 @@ import time
 
 from experiments.data_handlers import results_serializer
 from experiments.optimizers import optimizers_factory
-from helpers.enums.OptimizerName import OptimizerName
-from helpers.enums.ProblemName import ProblemName
-from problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
-from problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
+from experiments.problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
+from experiments.problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
     generate_random_graph_instances, generate_ladder_graph_instances, generate_caveman_graph_instances, \
     generate_barbell_graph_instances
+from helpers.enums.OptimizerName import OptimizerName
+from helpers.enums.ProblemName import ProblemName
 from qaoa_solver import qaoa
 
 
