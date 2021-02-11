@@ -8,8 +8,8 @@ from experiments.problem_instances.graph_problems.graph_problem_instance_factory
 from experiments.problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
     generate_random_graph_instances, generate_ladder_graph_instances, generate_caveman_graph_instances, \
     generate_barbell_graph_instances
-from helpers.enums.OptimizerName import OptimizerName
-from helpers.enums.ProblemName import ProblemName
+from helpers.enums.optimizer_name import OptimizerName
+from helpers.enums.problem_name import ProblemName
 from qaoa_solver import qaoa
 
 
@@ -35,8 +35,9 @@ def __get_cartesian_product_of_inputs(problems, graph_instances_train_operators,
 
 
 def get_random_graphs_train_instances():
-    random_graph_num_of_vertices_train = [8]
-    random_graph_probabilities_train = [0.5, 0.6, 0.7, 0.8]
+    random_graph_num_of_vertices_train = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+    # random_graph_probabilities_train = [0.5, 0.6, 0.7, 0.8]
+    random_graph_probabilities_train = [0.8]
     return generate_random_graph_instances(random_graph_num_of_vertices_train, random_graph_probabilities_train)
 
 
@@ -80,8 +81,8 @@ def get_barbell_graphs_test_instances():
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    num_of_starting_points = [5]
-    p_params = [1]
+    num_of_starting_points = [10]
+    p_params = [3]
     problems = [ProblemName.MAX_CUT]
     NUM_OF_PROCESSES = 8
     optimizers = [OptimizerName.COBYLA]

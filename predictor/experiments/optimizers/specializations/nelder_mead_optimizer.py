@@ -1,7 +1,7 @@
 from qiskit.aqua.components.optimizers import NELDER_MEAD
 
-from experiments.optimizers.Optimizer import Optimizer
-from helpers.enums.OptimizerName import OptimizerName
+from experiments.optimizers.optimizer import Optimizer
+from helpers.enums.optimizer_name import OptimizerName
 
 
 class NelderMeadOptimizer(Optimizer):

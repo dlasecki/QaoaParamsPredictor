@@ -8,7 +8,7 @@ from qiskit.aqua.algorithms import QAOA
 from qiskit.optimization.applications.ising import max_cut
 from qiskit.optimization.applications.ising.common import sample_most_likely
 
-from experiments.problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
+from experiments.problem_instances.graph_problems.graph_problem_instance import ProblemInstance
 
 
 def qaoa_with_optimizer(problem_instance: ProblemInstance):

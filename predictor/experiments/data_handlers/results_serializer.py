@@ -1,8 +1,8 @@
 import json
 from datetime import datetime
 
-from experiments.problem_instances.Result import Result
-from experiments.problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
+from experiments.problem_instances.graph_problems.graph_problem_instance import ProblemInstance
+from experiments.problem_instances.result import Result
 from helpers.converters import complex_ndarray_to_list
 
 

@@ -1,10 +1,10 @@
 from qiskit.optimization.applications.ising import max_cut
 
-from experiments.optimizers.Optimizer import Optimizer
-from experiments.problem_instances.graph_problems.GraphProblemInstance import ProblemInstance
+from experiments.optimizers.optimizer import Optimizer
+from experiments.problem_instances.graph_problems.graph_problem_instance import ProblemInstance
 from experiments.problem_instances.instances_generators.graph_problems import graph_weight_matrix_calculator
 from experiments.quadratic_solver import get_exact_classical_binary_solution
-from helpers.enums.ProblemName import ProblemName
+from helpers.enums.problem_name import ProblemName
 
 
 class MaxCutProblemInstance(ProblemInstance):

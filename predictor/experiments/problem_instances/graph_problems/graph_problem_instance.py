@@ -1,8 +1,8 @@
 from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.operators.legacy import op_converter
 
-from experiments.optimizers.Optimizer import Optimizer
-from helpers.enums.ProblemName import ProblemName
+from experiments.optimizers.optimizer import Optimizer
+from helpers.enums.problem_name import ProblemName
 
 
 class ProblemInstance:

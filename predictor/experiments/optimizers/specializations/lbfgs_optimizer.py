@@ -1,7 +1,7 @@
 from qiskit.aqua.components.optimizers import L_BFGS_B
 
-from experiments.optimizers.Optimizer import Optimizer
-from helpers.enums.OptimizerName import OptimizerName
+from experiments.optimizers.optimizer import Optimizer
+from helpers.enums.optimizer_name import OptimizerName
 
 
 class LbfgsOptimizer(Optimizer):

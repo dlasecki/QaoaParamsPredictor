@@ -3,7 +3,7 @@ from os import listdir
 from os.path import isfile, join
 
 from experiments.data_handlers import json_reader
-from helpers.enums.OptimizerName import OptimizerName
+from helpers.enums.optimizer_name import OptimizerName
 
 
 def load_jsons(directory: str, optimizer_name: OptimizerName, p: int):

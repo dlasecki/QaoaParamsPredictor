@@ -1,12 +1,12 @@
-from experiments.optimizers.Optimizer import Optimizer
-from experiments.problem_instances.graph_problems.specializations.GraphPartitionProblemInstance import \
+from experiments.optimizers.optimizer import Optimizer
+from experiments.problem_instances.graph_problems.specializations.graph_partition_problem_instance import \
     GraphPartitionProblemInstance
-from experiments.problem_instances.graph_problems.specializations.MaxCutProblemInstance import MaxCutProblemInstance
-from experiments.problem_instances.graph_problems.specializations.StableSetProblemInstance import \
+from experiments.problem_instances.graph_problems.specializations.maxcut_problem_instance import MaxCutProblemInstance
+from experiments.problem_instances.graph_problems.specializations.stable_set_problem_instance import \
     StableSetProblemInstance
-from experiments.problem_instances.graph_problems.specializations.VertexCoverProblemInstance import \
+from experiments.problem_instances.graph_problems.specializations.vertex_cover_problem_instance import \
     VertexCoverProblemInstance
-from helpers.enums.ProblemName import ProblemName
+from helpers.enums.problem_name import ProblemName
 
 
 def create_graph_problem_instance(problem_name, p_param, input_graph, optimizer: Optimizer, initial_points_num):

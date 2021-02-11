@@ -1,9 +1,9 @@
 from sklearn.neighbors import KernelDensity
 
-from kernel_density_estimation.KdeModel import KdeModel
 from kernel_density_estimation.data_handlers.jsons_validator import validate_json_list_not_empty, validate_jsons, \
     __get_model_metadata
 from kernel_density_estimation.kde_matrix_builder import build_kde_parameters_matrix
+from kernel_density_estimation.kde_model import KdeModel
 
 
 def train_kde_model(jsons_list, kernel: str, bandwidth: float):
@@ -17,5 +17,5 @@ def train_kde_model(jsons_list, kernel: str, bandwidth: float):
 
 
 def __create_kde_model(jsons_list, kde_model, kernel, bandwidth):
-    problem_name, graph_type, number_of_instances_trained = __get_model_metadata(jsons_list)
-    return KdeModel(kde_model, kernel, bandwidth, problem_name, graph_type, number_of_instances_trained)
+    problem_name, graph_type, number_of_instances_trained, p = __get_model_metadata(jsons_list)
+    return KdeModel(kde_model, kernel, bandwidth, problem_name, graph_type, number_of_instances_trained, p)

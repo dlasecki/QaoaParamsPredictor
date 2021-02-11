@@ -1,6 +1,6 @@
 import pickle
 
-from kernel_density_estimation.KdeModel import KdeModel
+from kernel_density_estimation.kde_model import KdeModel
 
 
 def serialize_kde_model(directory, kde_model: KdeModel):
@@ -15,4 +15,6 @@ def __create_model_file_name(kde_model: KdeModel):
     graph_type = kde_model.graph_type
     kernel = kde_model.kernel
     bandwidth = kde_model.bandwidth
-    return 'kde_model_' + problem_name + "_" + graph_type + "_" + kernel + "_bandwidth=" + str(bandwidth)
+    p = kde_model.p
+    return 'kde_model_' + problem_name + "_" + graph_type + "_" + kernel + "_bandwidth=" + str(bandwidth) + "_p=" + str(
+        p)

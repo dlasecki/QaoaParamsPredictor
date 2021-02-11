@@ -1,4 +1,4 @@
-from helpers.enums.OptimizerName import OptimizerName
+from helpers.enums.optimizer_name import OptimizerName
 
 
 class Optimizer:
