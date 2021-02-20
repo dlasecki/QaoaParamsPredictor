@@ -1,4 +1,4 @@
-import pickle
+import dill
 
 from kernel_density_estimation.kde_model import KdeModel
 
@@ -7,7 +7,7 @@ def serialize_kde_model(directory, kde_model: KdeModel):
     file_name = __create_model_file_name(kde_model)
     directory = directory + "\\" + file_name
     with open(directory, 'wb') as f:
-        pickle.dump(kde_model, f)
+        dill.dump(kde_model, f)
 
 
 def __create_model_file_name(kde_model: KdeModel):
