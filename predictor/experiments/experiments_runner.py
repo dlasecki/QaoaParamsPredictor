@@ -15,8 +15,7 @@ from qaoa_solver import qaoa
 
 def worker(problem_name, input_graph, p_param, optimizer, initial_points_num):
     optimizer_instance = optimizers_factory.create_optimizer(optimizer)
-    problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer_instance,
-                                                     initial_points_num)
+    problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer_instance)
     qaoa_res = qaoa.qaoa_with_optimizer(problem_instance)
     directory = __build_problem_instance_directory(problem_instance, problem_name)
     results_serializer.save_to_json(directory, qaoa_res)
@@ -38,6 +37,7 @@ def get_random_graphs_train_instances():
     random_graph_num_of_vertices_train = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
     # random_graph_probabilities_train = [0.5, 0.6, 0.7, 0.8]
     random_graph_probabilities_train = [0.8]
+
     return generate_random_graph_instances(random_graph_num_of_vertices_train, random_graph_probabilities_train)
 
 
@@ -48,13 +48,13 @@ def get_random_graphs_test_instances():
 
 
 def get_ladder_graphs_train_instances():
-    ladder_graph_num_of_vertices_train = [4]
-    return generate_ladder_graph_instances(ladder_graph_num_of_vertices_train)
+    ladder_graph_ladder_length_train = [4]
+    return generate_ladder_graph_instances(ladder_graph_ladder_length_train)
 
 
 def get_ladder_graphs_test_instances():
-    ladder_graph_num_of_vertices_test = [2, 3, 5, 6, 7, 8, 9, 10, 11]
-    return generate_ladder_graph_instances(ladder_graph_num_of_vertices_test)
+    ladder_graph_ladder_length_test = [2, 3, 5, 6, 7, 8, 9, 10, 11]
+    return generate_ladder_graph_instances(ladder_graph_ladder_length_test)
 
 
 def get_caveman_graphs_train_instances():

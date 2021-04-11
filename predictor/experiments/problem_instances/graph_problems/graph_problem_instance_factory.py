@@ -9,7 +9,8 @@ from experiments.problem_instances.graph_problems.specializations.vertex_cover_p
 from helpers.enums.problem_name import ProblemName
 
 
-def create_graph_problem_instance(problem_name, p_param, input_graph, optimizer: Optimizer, initial_points_num):
+def create_graph_problem_instance(problem_name, p_param, input_graph, optimizer: Optimizer = None,
+                                  initial_points_num=None, initial_points=None):
     if problem_name == ProblemName.MAX_CUT:
         return MaxCutProblemInstance(p_param, input_graph, optimizer, initial_points_num)
     elif problem_name == ProblemName.GRAPH_PARTITION:

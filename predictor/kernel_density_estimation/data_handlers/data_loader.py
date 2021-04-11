@@ -8,7 +8,7 @@ from helpers.enums.optimizer_name import OptimizerName
 
 def load_jsons(directory: str, optimizer_name: OptimizerName, p: int):
     fn = pathlib.Path(__file__).parent.parent.parent
-    directory = str(fn) + directory
+    directory = str(fn) + directory + "\\p=" + str(int(p)) + "\\"
     all_file_names = __get_all_file_names(directory)
     relevant_file_names = __get_relevant_file_names(all_file_names, optimizer_name, p)
     jsons_list = []

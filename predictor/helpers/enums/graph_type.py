@@ -3,6 +3,6 @@ from enum import Enum
 
 class GraphType(Enum):
     BARBELL = "barbell"
-    RANDOM = "random"
+    RANDOM = "erdos_renyi"
     LADDER = "ladder"
     CAVEMAN = "caveman"

@@ -19,8 +19,9 @@ def qaoa_with_optimizer(problem_instance: ProblemInstance):
     result_min_cost = None
     all_results = []
     for _ in range(problem_instance.num_starting_points):
-        result = qaoa(quantum_instance, problem_instance.qubit_operator, problem_instance.p,
-                      __generate_uniformly_random_parameters(problem_instance.p), problem_instance.optimizer.optimizer)
+        result = qaoa(quantum_instance, problem_instance,
+                      initial_point=__generate_uniformly_random_parameters(problem_instance.p),
+                      optimizer=problem_instance.optimizer.optimizer)
         qaoa_expectation = result['eigenvalue'].real + problem_instance.offset
         all_results.append(result)
         if __is_solution_better(min_cost, qaoa_expectation):
@@ -37,7 +38,10 @@ def qaoa_with_optimizer(problem_instance: ProblemInstance):
     return problem_instance
 
 
-def qaoa(quantum_instance, qubit_operator, p, initial_point, optimizer=None):
+def qaoa(quantum_instance, problem_instance, initial_point, optimizer=None):
+    qubit_operator = problem_instance.qubit_operator
+    p = problem_instance.p
+
     qaoa_object = QAOA(operator=qubit_operator, p=p, initial_point=initial_point, optimizer=optimizer)
     return qaoa_object.run(quantum_instance)
 

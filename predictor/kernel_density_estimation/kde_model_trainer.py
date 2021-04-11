@@ -11,6 +11,7 @@ def train_kde_model(jsons_list, kernel: str, bandwidth: float):
     if not validate_jsons(jsons_list):
         raise Exception("Provided json files reference different optimization problem and/or graph type.")
     good_params_matrix = build_kde_parameters_matrix(jsons_list)
+    # print(good_params_matrix)
     kde = KernelDensity(kernel=kernel, bandwidth=bandwidth)
     kde.fit(good_params_matrix)
     return __create_kde_model(jsons_list, kde, kernel, bandwidth)

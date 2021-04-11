@@ -1,11 +1,11 @@
 from experiments.problem_instances.instances_generators.graph_problems import graphs_builder
 
 
-def generate_ladder_graph_instances(ladder_graph_num_of_vertices):
+def generate_ladder_graph_instances(ladder_graph_ladder_length):
     instances = []
     graph_id = 0
-    for num_of_vertices in ladder_graph_num_of_vertices:
-        graph = graphs_builder.generate_ladder_graph(num_of_vertices, graph_id)
+    for ladder_length in ladder_graph_ladder_length:
+        graph = graphs_builder.generate_ladder_graph(ladder_length, graph_id)
         instances.append(graph)
         graph_id += 1
     return instances
