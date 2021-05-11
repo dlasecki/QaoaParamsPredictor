@@ -6,13 +6,12 @@ from qaoa_solver.qaoa import qaoa_with_optimizer
 
 
 def test_run_qaoa():
-    problem_id = "1"
     p = 1
     input_graph = generate_ladder_graph(3, 1)
     optimizer = create_optimizer(optimizer_name.OptimizerName.COBYLA)
     num_starting_points = 1
 
-    problem_instance = MaxCutProblemInstance(problem_id, p, input_graph, optimizer, num_starting_points)
+    problem_instance = MaxCutProblemInstance(p, input_graph, optimizer, num_starting_points)
     result = qaoa_with_optimizer(problem_instance)
 
     assert isinstance(result.optimal_value, float), "Optimal value not a float."
