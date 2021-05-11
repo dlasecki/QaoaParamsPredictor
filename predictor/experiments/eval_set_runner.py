@@ -5,7 +5,6 @@ import time
 from qiskit import Aer
 from qiskit.aqua import QuantumInstance
 
-from experiments.data_handlers import results_serializer
 from experiments.kde_model_provider import get_kde_model
 from experiments.problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
 from experiments.problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
@@ -20,7 +19,7 @@ def worker(problem_name, graph_type, input_graph, p_param, bandwidth, kernel):
     backend = Aer.get_backend('statevector_simulator')
     quantum_instance = QuantumInstance(backend)
     problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph)
-    min_cost = None
+    min_cost_expectation = None
     result_min_cost = None
     min_cost_params = None
     kde_model = get_kde_model(problem_name, graph_type, p_param, kernel, bandwidth)
@@ -29,18 +28,21 @@ def worker(problem_name, graph_type, input_graph, p_param, bandwidth, kernel):
     for initial_point in initial_points:
         qaoa_res = qaoa.qaoa(quantum_instance, problem_instance, initial_point)
         qaoa_expectation = qaoa_res['eigenvalue'].real + problem_instance.offset
-        if __is_solution_better(min_cost, qaoa_expectation):
-            min_cost, result_min_cost, min_cost_params = qaoa_expectation, qaoa_res, initial_point
-    result_min_cost = __get_instance_with_best_solution(problem_instance, min_cost, min_cost_params, None, None)
+        if __is_solution_better(min_cost_expectation, qaoa_expectation):
+            min_cost_expectation, result_min_cost, min_cost_params = qaoa_expectation, qaoa_res, initial_point
+    result_min_cost = __get_instance_with_best_solution(problem_instance, min_cost_expectation, min_cost_params, None,
+                                                        None)
+    # TODO save to model_validation folder
     directory = __build_problem_instance_directory(problem_instance, problem_name)
-    results_serializer.save_to_json(directory, result_min_cost)
+    # results_serializer.save_to_json(directory, result_min_cost)
     print(result_min_cost.optimal_params, result_min_cost.optimal_value)
     print(result_min_cost.classical_solution_value)
     return result_min_cost.optimal_params, result_min_cost.optimal_value
 
 
 def __build_problem_instance_directory(problem_instance, problem_name):
-    directory = "output\\" + problem_name.value + "\\" + problem_instance.input_graph.graph["graph_type"].value
+    directory = "output\\" + problem_name.value + "\\" + problem_instance.input_graph.graph[
+        "graph_type"].value + "_evaluation"
     return directory
 
 
@@ -76,8 +78,8 @@ def get_barbell_graphs_test_instances():
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    p_params = [4]
-    problems = [ProblemName.MAX_CUT]
+    p_params = [2]
+    problems = [ProblemName.VERTEX_COVER]
     graph_types = ["erdos_renyi"]
     NUM_OF_PROCESSES = 8
     bandwidths = [0.2]

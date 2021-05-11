@@ -21,4 +21,7 @@ class GraphPartitionProblemInstance(ProblemInstance):
 
     def __get_classical_solution(self):
         x = get_exact_classical_binary_solution(self.qubit_operator, self.offset)
+        return self.__calc_objective_value(x)
+
+    def __calc_objective_value(self, x):
         return graph_partition.objective_value(x, self.weight_operator)

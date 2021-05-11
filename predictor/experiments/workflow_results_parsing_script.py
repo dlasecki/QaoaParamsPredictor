@@ -21,7 +21,7 @@ def get_best_solution(all_cases, case_id):
     graph_id = 0  # max 0 because only 1 graph
     optimal_value = 0
     optimal_params = None
-
+    # TODO problem with data while parsing random max p=3, key error
     for optimizer_run_id in range(optimizer_runs):
         # Get optimal values
         optimal_value = \
@@ -49,9 +49,10 @@ def generate_json_with_params(data, problem_name, graph_type, p, json_name):
         json.dump(data, outfile)
 
 
-def generate_output_dictionary(optimal_params, min_value, good_params, optimizer_name, graph_type, p, weight_matrix):
+def generate_output_dictionary(optimal_params, min_value, good_params, optimizer_name, graph_type, p, weight_matrix,
+                               problem):
     dic = {}
-    dic["problem_name"] = "MaxCut"
+    dic["problem_name"] = problem
     dic["hamiltonian_matrix"] = []
     dic["weight_matrix"] = weight_matrix
     dic["optimal_params"] = optimal_params
@@ -69,64 +70,64 @@ def generate_output_dictionary(optimal_params, min_value, good_params, optimizer
 
 if __name__ == '__main__':
     # we get 8 different graphs for a given probability and for each we initialize in 1250 erdos_renyi points
-    good_params = []
-    directory = 'workflow_results/max_cut_random_p=3_results/'
-    files = [file_name for file_name in listdir(directory) if isfile(join(directory, file_name))]
-    print(files)
-    for file in files:
-        prob = re.split('=', re.split('\.', file)[0])[1]
-        raw_data = json.load(open(join(directory, file), 'r'))
-        hash_table = get_hash_table(raw_data)
+    problem = "partition"
+    graph_type_name = "barbell"
+    for p in range(1, 5):
+        good_params = []
+        directory = 'workflow_results/' + problem + '_' + graph_type_name + '_p=' + str(p) + '_results/'
+        files = [file_name for file_name in listdir(directory) if isfile(join(directory, file_name))]
 
-        all_cases = [case for _, case in raw_data.items()]
+        for file in files:
+            prob = re.split('=', re.split('\.', file)[0])[1] if graph_type_name == "random" else "0"
+            raw_data = json.load(open(join(directory, file), 'r'))
+            hash_table = get_hash_table(raw_data)
 
-        optimizer_runs = 1250
-        graph_id = 0  # max 0 because only 1 graph
+            all_cases = [case for _, case in raw_data.items()]
 
-        for case_id in range(len(all_cases)):  # max 7 because of 8 paralell runs
-            optimal_value, optimal_params = get_best_solution(all_cases, case_id)
-            # Get graph
-            graph_json_0 = all_cases[case_id]['graph-list'][str(graph_id)]['graph']
-            optimal_solutions = all_cases[case_id]['graph-list'][str(graph_id)]['optimal_solution']
-            # optimal_value = all_cases[case_id]['graph-list'][str(graph_id)]['optimal_value']
-            # print(optimal_value)
-            graph = nx.readwrite.json_graph.node_link_graph(graph_json_0)
-            weight_matrix = graph_weight_matrix_calculator.get_weight_matrix(graph)
-            # print(weight_matrix)  # each case generates a new graph
-            graph_specs = all_cases[case_id]['inputs']['graph_specs']['value']
+            optimizer_runs = 1250
+            graph_id = 0  # max 0 because only 1 graph
+            print(file)
+            for case_id in range(len(all_cases)):  # max 7 because of 8 paralell runs
+                optimal_value, optimal_params = get_best_solution(all_cases, case_id)
 
-            graph_type = graph_specs['type_graph']
+                graph_json_0 = all_cases[case_id]['graph-list'][str(graph_id)]['graph']
+                optimal_solutions = all_cases[case_id]['graph-list'][str(graph_id)]['optimal_solution']
 
-            # Get optimizer data
-            optimizer_specs = all_cases[case_id]['inputs']['optimizer_specs']['value']
-            optimizer_name = optimizer_specs['method']
+                graph = nx.readwrite.json_graph.node_link_graph(graph_json_0)
+                weight_matrix = graph_weight_matrix_calculator.get_weight_matrix(graph)
 
-            for optimizer_run_id in range(optimizer_runs):
-                # Get optimal values
-                current_optimal_value = \
-                    all_cases[case_id]['optimization-results-aggregated'][str(graph_id)][str(optimizer_run_id)][
-                        "opt_value"][
-                        "value"]
+                graph_specs = all_cases[case_id]['inputs']['graph_specs']['value']
 
-                optimal_params = \
-                    all_cases[case_id]['optimization-results-aggregated'][str(graph_id)][str(optimizer_run_id)][
-                        "opt_params"][
-                        "real"]
+                graph_type = graph_specs['type_graph']
 
-                p = len(optimal_params) / 2
+                # Get optimizer data
+                optimizer_specs = all_cases[case_id]['inputs']['optimizer_specs']['value']
+                optimizer_name = optimizer_specs['method']
 
-                # Bitstrings from QAOA
-                bitstrings = \
-                    all_cases[case_id]['bitstring-distributions-aggregated'][str(graph_id)][str(optimizer_run_id)][
-                        'bitstring_distribution']
+                for optimizer_run_id in range(optimizer_runs):
+                    # Get optimal values
+                    current_optimal_value = \
+                        all_cases[case_id]['optimization-results-aggregated'][str(graph_id)][str(optimizer_run_id)][
+                            "opt_value"][
+                            "value"]
 
-                if is_solution_good_enough(optimal_value, current_optimal_value):
-                    # good_params_with_strings.append((optimal_params, bitstrings))
-                    good_params.append(optimal_params)
+                    optimal_params = \
+                        all_cases[case_id]['optimization-results-aggregated'][str(graph_id)][str(optimizer_run_id)][
+                            "opt_params"][
+                            "real"]
 
-            dict = generate_output_dictionary(optimal_params, optimal_value, good_params, optimizer_name, graph_type, p,
-                                              weight_matrix.tolist())
-            json_name = "max_cut_" + graph_type + "_" + str(case_id) + "_" + "p=" + str(int(
-                p)) + "_" + optimizer_name + "_pr=" + prob
-            generate_json_with_params(dict, "maxcut", graph_type, p, json_name)
-            print(len(good_params))
+                    # Bitstrings from QAOA
+                    bitstrings = \
+                        all_cases[case_id]['bitstring-distributions-aggregated'][str(graph_id)][str(optimizer_run_id)][
+                            'bitstring_distribution']
+
+                    if is_solution_good_enough(optimal_value, current_optimal_value):
+                        good_params.append(optimal_params)
+
+                dict = generate_output_dictionary(optimal_params, optimal_value, good_params, optimizer_name,
+                                                  graph_type, p,
+                                                  weight_matrix.tolist(), problem)
+                json_name = problem + "_" + graph_type + "_" + str(case_id) + "_" + "p=" + str(int(
+                    p)) + "_" + optimizer_name + "_pr=" + prob
+                generate_json_with_params(dict, problem, graph_type, p, json_name)
+                print(len(good_params))

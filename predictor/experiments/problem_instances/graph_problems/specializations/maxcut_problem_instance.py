@@ -20,4 +20,7 @@ class MaxCutProblemInstance(ProblemInstance):
 
     def __get_classical_solution(self):
         x = get_exact_classical_binary_solution(self.qubit_operator, self.offset)
+        return self.__calc_objective_value(x)
+
+    def __calc_objective_value(self, x):
         return max_cut.max_cut_value(x, self.weight_operator)

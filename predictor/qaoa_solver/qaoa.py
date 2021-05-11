@@ -5,7 +5,6 @@ from numpy.random.mtrand import uniform
 from qiskit import Aer
 from qiskit.aqua import QuantumInstance
 from qiskit.aqua.algorithms import QAOA
-from qiskit.optimization.applications.ising import max_cut
 from qiskit.optimization.applications.ising.common import sample_most_likely
 
 from experiments.problem_instances.graph_problems.graph_problem_instance import ProblemInstance
@@ -29,7 +28,7 @@ def qaoa_with_optimizer(problem_instance: ProblemInstance):
 
     problem_instance.good_params = __get_high_quality_solutions(all_results, result_min_cost, problem_instance.offset)
     most_likely_binary_solution = sample_most_likely(result_min_cost['eigenstate'])
-    most_likely_solution_value = max_cut.max_cut_value(most_likely_binary_solution, problem_instance.weight_matrix)
+    most_likely_solution_value = problem_instance.calc_objective_value(most_likely_binary_solution)
     problem_instance = __get_instance_with_best_solution(problem_instance, -min_cost,
                                                          result_min_cost['optimal_point'],
                                                          most_likely_binary_solution,

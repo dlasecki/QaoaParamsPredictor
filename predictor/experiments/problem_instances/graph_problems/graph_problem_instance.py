@@ -26,3 +26,6 @@ class ProblemInstance:
         self.most_likely_solution_value = most_likely_solution_value
         self.classical_solution_value = classical_solution_value
         self.good_params = good_params
+
+    def calc_objective_value(self, x):
+        pass

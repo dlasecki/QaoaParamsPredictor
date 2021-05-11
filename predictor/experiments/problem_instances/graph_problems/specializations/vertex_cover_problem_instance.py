@@ -21,4 +21,10 @@ class VertexCoverProblemInstance(ProblemInstance):
 
     def __get_classical_solution(self):
         x = get_exact_classical_binary_solution(self.qubit_operator, self.offset)
-        return vertex_cover.check_full_edge_coverage(x, self.weight_operator)
+        return self.__calc_objective_value(x)
+
+    def __calc_objective_value(self, x):
+        # pylint: disable=invalid-name
+        # x_mat = np.outer(x, (1 - x))
+        # return np.sum(self.weight_operator * x_mat)
+        return sum(x)
