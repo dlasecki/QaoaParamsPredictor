@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.operators.legacy import op_converter
 
@@ -27,5 +29,6 @@ class ProblemInstance:
         self.classical_solution_value = classical_solution_value
         self.good_params = good_params
 
+    @abstractmethod
     def calc_objective_value(self, x):
         pass

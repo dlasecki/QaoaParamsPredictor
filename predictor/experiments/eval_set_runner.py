@@ -12,7 +12,7 @@ from experiments.problem_instances.instances_generators.graph_problems.graphs_in
     generate_barbell_graph_instances
 from helpers.enums.problem_name import ProblemName
 from qaoa_solver import qaoa
-from qaoa_solver.qaoa import __is_solution_better, __get_instance_with_best_solution
+from qaoa_solver.qaoa import _is_solution_better, _get_instance_with_best_solution
 
 
 def worker(problem_name, graph_type, input_graph, p_param, bandwidth, kernel):
@@ -28,34 +28,34 @@ def worker(problem_name, graph_type, input_graph, p_param, bandwidth, kernel):
     for initial_point in initial_points:
         qaoa_res = qaoa.qaoa(quantum_instance, problem_instance, initial_point)
         qaoa_expectation = qaoa_res['eigenvalue'].real + problem_instance.offset
-        if __is_solution_better(min_cost_expectation, qaoa_expectation):
+        if _is_solution_better(min_cost_expectation, qaoa_expectation):
             min_cost_expectation, result_min_cost, min_cost_params = qaoa_expectation, qaoa_res, initial_point
-    result_min_cost = __get_instance_with_best_solution(problem_instance, min_cost_expectation, min_cost_params, None,
-                                                        None)
+    result_min_cost = _get_instance_with_best_solution(problem_instance, min_cost_expectation, min_cost_params, None,
+                                                       None)
     # TODO save to model_validation folder
-    directory = __build_problem_instance_directory(problem_instance, problem_name)
+    directory = _build_problem_instance_directory(problem_instance, problem_name)
     # results_serializer.save_to_json(directory, result_min_cost)
     print(result_min_cost.optimal_params, result_min_cost.optimal_value)
     print(result_min_cost.classical_solution_value)
     return result_min_cost.optimal_params, result_min_cost.optimal_value
 
 
-def __build_problem_instance_directory(problem_instance, problem_name):
+def _build_problem_instance_directory(problem_instance, problem_name):
     directory = "output\\" + problem_name.value + "\\" + problem_instance.input_graph.graph[
         "graph_type"].value + "_evaluation"
     return directory
 
 
-def __get_cartesian_product_of_inputs(problems, graph_types, graph_instances_train_operators, p_params, bandwidths,
-                                      kernels):
+def _get_cartesian_product_of_inputs(problems, graph_types, graph_instances_train_operators, p_params, bandwidths,
+                                     kernels):
     return itertools.product(problems, graph_types, graph_instances_train_operators, p_params, bandwidths, kernels)
 
 
 def get_random_graphs_test_instances():
     # random_graph_num_of_vertices_test = [8, 12, 16, 20]
     # random_graph_probabilities_test = [0.5, 0.6, 0.7, 0.8]
-    random_graph_num_of_vertices_test = [12]
-    random_graph_probabilities_test = [0.5]
+    random_graph_num_of_vertices_test = [13, 13]
+    random_graph_probabilities_test = [0.25]
     return generate_random_graph_instances(random_graph_num_of_vertices_test, random_graph_probabilities_test)
 
 
@@ -78,21 +78,21 @@ def get_barbell_graphs_test_instances():
 
 if __name__ == '__main__':
     start = time.perf_counter()
-    p_params = [2]
-    problems = [ProblemName.VERTEX_COVER]
+    p_params = [4]
+    problems = [ProblemName.MAX_CUT]
     graph_types = ["erdos_renyi"]
     NUM_OF_PROCESSES = 8
     bandwidths = [0.2]
     kernels = ["gaussian"]
 
-    inputs_random = __get_cartesian_product_of_inputs(problems, graph_types, get_random_graphs_test_instances(),
+    inputs_random = _get_cartesian_product_of_inputs(problems, graph_types, get_random_graphs_test_instances(),
+                                                     p_params, bandwidths, kernels)
+    inputs_ladder = _get_cartesian_product_of_inputs(problems, graph_types, get_ladder_graphs_test_instances(),
+                                                     p_params, bandwidths, kernels)
+    inputs_caveman = _get_cartesian_product_of_inputs(problems, graph_types, get_caveman_graphs_test_instances(),
                                                       p_params, bandwidths, kernels)
-    inputs_ladder = __get_cartesian_product_of_inputs(problems, graph_types, get_ladder_graphs_test_instances(),
+    inputs_barbell = _get_cartesian_product_of_inputs(problems, graph_types, get_barbell_graphs_test_instances(),
                                                       p_params, bandwidths, kernels)
-    inputs_caveman = __get_cartesian_product_of_inputs(problems, graph_types, get_caveman_graphs_test_instances(),
-                                                       p_params, bandwidths, kernels)
-    inputs_barbell = __get_cartesian_product_of_inputs(problems, graph_types, get_barbell_graphs_test_instances(),
-                                                       p_params, bandwidths, kernels)
     inputs = itertools.chain(inputs_random)
 
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:

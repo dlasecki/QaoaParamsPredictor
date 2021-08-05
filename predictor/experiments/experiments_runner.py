@@ -15,28 +15,28 @@ from qaoa_solver import qaoa
 
 def worker(problem_name, input_graph, p_param, optimizer, initial_points_num):
     optimizer_instance = optimizers_factory.create_optimizer(optimizer)
-    problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer_instance)
+    problem_instance = create_graph_problem_instance(problem_name, p_param, input_graph, optimizer_instance,
+                                                     initial_points_num)
     qaoa_res = qaoa.qaoa_with_optimizer(problem_instance)
-    directory = __build_problem_instance_directory(problem_instance, problem_name)
+    directory = _build_problem_instance_directory(problem_instance, problem_name)
     results_serializer.save_to_json(directory, qaoa_res)
 
     return qaoa_res.optimal_params, qaoa_res.optimal_value
 
 
-def __build_problem_instance_directory(problem_instance, problem_name):
+def _build_problem_instance_directory(problem_instance, problem_name):
     directory = "output\\" + problem_name.value + "\\" + problem_instance.input_graph.graph["graph_type"].value
     return directory
 
 
-def __get_cartesian_product_of_inputs(problems, graph_instances_train_operators, p_params, optimizers,
-                                      initial_points_num):
+def _get_cartesian_product_of_inputs(problems, graph_instances_train_operators, p_params, optimizers,
+                                     initial_points_num):
     return itertools.product(problems, graph_instances_train_operators, p_params, optimizers, initial_points_num)
 
 
 def get_random_graphs_train_instances():
     random_graph_num_of_vertices_train = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
-    # random_graph_probabilities_train = [0.5, 0.6, 0.7, 0.8]
-    random_graph_probabilities_train = [0.8]
+    random_graph_probabilities_train = [0.5, 0.6, 0.7, 0.8]
 
     return generate_random_graph_instances(random_graph_num_of_vertices_train, random_graph_probabilities_train)
 
@@ -84,19 +84,18 @@ if __name__ == '__main__':
     num_of_starting_points = [10]
     p_params = [3]
     problems = [ProblemName.MAX_CUT]
-    NUM_OF_PROCESSES = 8
+    NUM_OF_PROCESSES = 6
     optimizers = [OptimizerName.COBYLA]
 
-    inputs_random = __get_cartesian_product_of_inputs(problems, get_random_graphs_train_instances(), p_params,
+    inputs_random = _get_cartesian_product_of_inputs(problems, get_random_graphs_train_instances(), p_params,
+                                                     optimizers, num_of_starting_points)
+    inputs_ladder = _get_cartesian_product_of_inputs(problems, get_ladder_graphs_train_instances(), p_params,
+                                                     optimizers, num_of_starting_points)
+    inputs_caveman = _get_cartesian_product_of_inputs(problems, get_caveman_graphs_train_instances(), p_params,
                                                       optimizers, num_of_starting_points)
-    inputs_ladder = __get_cartesian_product_of_inputs(problems, get_ladder_graphs_train_instances(), p_params,
+    inputs_barbell = _get_cartesian_product_of_inputs(problems, get_barbell_graphs_train_instances(), p_params,
                                                       optimizers, num_of_starting_points)
-    inputs_caveman = __get_cartesian_product_of_inputs(problems, get_caveman_graphs_train_instances(), p_params,
-                                                       optimizers, num_of_starting_points)
-    inputs_barbell = __get_cartesian_product_of_inputs(problems, get_barbell_graphs_train_instances(), p_params,
-                                                       optimizers, num_of_starting_points)
     inputs = itertools.chain(inputs_random)
-
     with multiprocessing.Pool(processes=NUM_OF_PROCESSES) as pool:
         results = pool.starmap(worker, inputs)
 

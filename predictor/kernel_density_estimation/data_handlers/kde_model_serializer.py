@@ -4,13 +4,13 @@ from kernel_density_estimation.kde_model import KdeModel
 
 
 def serialize_kde_model(directory, kde_model: KdeModel):
-    file_name = __create_model_file_name(kde_model)
+    file_name = _create_model_file_name(kde_model)
     directory = directory + "\\" + file_name
     with open(directory, 'wb') as f:
         dill.dump(kde_model, f)
 
 
-def __create_model_file_name(kde_model: KdeModel):
+def _create_model_file_name(kde_model: KdeModel):
     problem_name = kde_model.problem_name
     graph_type = kde_model.graph_type
     kernel = kde_model.kernel

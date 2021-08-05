@@ -16,12 +16,12 @@ class StableSetProblemInstance(ProblemInstance):
         self.qubit_operator, self.offset = stable_set.get_operator(self.weight_operator)
         super().__init__(ProblemName.STABLE_SET, p, input_graph, self.weight_operator, optimizer, num_starting_points,
                          optimal_params, optimal_value, self.qubit_operator, self.offset,
-                         most_likely_binary_solution, most_likely_solution_value, self.__get_classical_solution(),
+                         most_likely_binary_solution, most_likely_solution_value, self.get_classical_solution(),
                          good_params)
 
-    def __get_classical_solution(self):
+    def get_classical_solution(self):
         x = get_exact_classical_binary_solution(self.qubit_operator, self.offset)
-        return self.__calc_objective_value(x)
+        return self.calc_objective_value(x)
 
-    def __calc_objective_value(self, x):
+    def calc_objective_value(self, x):
         return stable_set.stable_set_value(x, self.weight_operator)

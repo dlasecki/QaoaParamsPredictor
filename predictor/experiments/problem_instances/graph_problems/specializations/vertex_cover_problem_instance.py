@@ -16,14 +16,14 @@ class VertexCoverProblemInstance(ProblemInstance):
         self.qubit_operator, self.offset = vertex_cover.get_operator(self.weight_operator)
         super().__init__(ProblemName.VERTEX_COVER, p, input_graph, self.weight_operator, optimizer,
                          num_starting_points, optimal_params, optimal_value, self.qubit_operator, self.offset,
-                         most_likely_binary_solution, most_likely_solution_value, self.__get_classical_solution(),
+                         most_likely_binary_solution, most_likely_solution_value, self.get_classical_solution(),
                          good_params)
 
-    def __get_classical_solution(self):
+    def get_classical_solution(self):
         x = get_exact_classical_binary_solution(self.qubit_operator, self.offset)
-        return self.__calc_objective_value(x)
+        return self.calc_objective_value(x)
 
-    def __calc_objective_value(self, x):
+    def calc_objective_value(self, x):
         # pylint: disable=invalid-name
         # x_mat = np.outer(x, (1 - x))
         # return np.sum(self.weight_operator * x_mat)

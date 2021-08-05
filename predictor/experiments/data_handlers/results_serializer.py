@@ -7,14 +7,14 @@ from helpers.converters import complex_ndarray_to_list
 
 
 def save_to_json(directory: str, problem_instance: ProblemInstance):
-    file_name = __create_problem_instance_file_name(problem_instance)
-    result = __create_result(problem_instance)
+    file_name = _create_problem_instance_file_name(problem_instance)
+    result = _create_result(problem_instance)
     with open(directory + "\\" + file_name + ".json", 'w') as outfile:
         print(outfile)
         json.dump(result.__dict__, outfile)
 
 
-def __create_result(problem_instance: ProblemInstance):
+def _create_result(problem_instance: ProblemInstance):
     optimizer_name = problem_instance.optimizer.optimizer_name.value if problem_instance.optimizer else None
     most_likely_binary_solution = problem_instance.most_likely_binary_solution.tolist() if problem_instance.most_likely_binary_solution else None
     return Result(problem_instance.problem_name.value, optimizer_name,
@@ -26,7 +26,7 @@ def __create_result(problem_instance: ProblemInstance):
                   problem_instance.input_graph.graph["graph_type"].value, problem_instance.p)
 
 
-def __create_problem_instance_file_name(problem_instance: ProblemInstance):
+def _create_problem_instance_file_name(problem_instance: ProblemInstance):
     timestamp_str = datetime.now().strftime("%d-%b-%Y-%H-%M-%S.%f")
     optimizer_name_underscored = (
             problem_instance.optimizer.optimizer_name.value + "_") if problem_instance.optimizer else ""
