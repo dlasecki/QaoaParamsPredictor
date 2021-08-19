@@ -24,4 +24,4 @@ class StableSetProblemInstance(ProblemInstance):
         return self.calc_objective_value(x)
 
     def calc_objective_value(self, x):
-        return stable_set.stable_set_value(x, self.weight_operator)
+        return stable_set.stable_set_value(x, self.weight_operator)[0]
