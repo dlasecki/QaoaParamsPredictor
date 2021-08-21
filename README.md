@@ -25,3 +25,5 @@ The project relies on the quantum computing library Qiskit where quantum algorit
 IN PROGRESS: Evaluation of created machine learning models on a test set.
 
 The project is funded by the Unitary Fund.
+
+"This project is licensed under the terms of the Apache 2.0 license."
