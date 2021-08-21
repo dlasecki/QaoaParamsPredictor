@@ -3,7 +3,7 @@ from math import pi
 from numpy import concatenate
 from numpy.random.mtrand import uniform
 from qiskit import Aer
-from qiskit.aqua import QuantumInstance
+from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QAOA
 from qiskit.optimization.applications.ising.common import sample_most_likely
 
@@ -11,6 +11,8 @@ from experiments.problem_instances.graph_problems.graph_problem_instance import 
 
 
 def qaoa_with_optimizer(problem_instance: ProblemInstance):
+    """Runs the QAOA algorithm with a classical optimizer of hyperparameters and returns a ProblemInstance containing
+    a solution."""
     backend = Aer.get_backend('statevector_simulator')
     quantum_instance = QuantumInstance(backend)
 
@@ -38,6 +40,8 @@ def qaoa_with_optimizer(problem_instance: ProblemInstance):
 
 
 def qaoa(quantum_instance, problem_instance, initial_point, optimizer=None):
+    """Runs the QAOA algorithm without a classical optimizer."""
+    aqua_globals.massive = True
     qubit_operator = problem_instance.qubit_operator
     p = problem_instance.p
 
@@ -46,6 +50,7 @@ def qaoa(quantum_instance, problem_instance, initial_point, optimizer=None):
 
 
 def _generate_uniformly_random_parameters(p: int):
+    """Generates random parameters that are then used as initial parameters for a QAOA algorithm."""
     return concatenate([uniform(low=0.0, high=2 * pi, size=p), uniform(low=0.0, high=pi, size=p)])
 
 
@@ -64,6 +69,7 @@ def _get_instance_with_best_solution(problem_instance: ProblemInstance, min_cost
 
 
 def _get_high_quality_solutions(all_results, best_result, offset):
+    """Filters solutions obtained from several runs to these with low approximation error."""
     high_quality_solutions_params = []
     best_objective_value = best_result['eigenvalue'].real + offset
     allowed_approximation_error = 0.01  # 1% approximation error
