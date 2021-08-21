@@ -5,7 +5,7 @@ from os.path import isfile, join
 
 import networkx as nx
 
-from experiments.problem_instances.instances_generators.graph_problems import graph_weight_matrix_calculator
+from data_structures.problem_instances.instances_generators.graph_problems import graph_weight_matrix_calculator
 
 
 def _get_hash_table(data):

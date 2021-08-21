@@ -1,4 +1,4 @@
-from experiments.problem_instances.instances_generators.graph_problems import graphs_builder
+from data_structures.problem_instances.instances_generators.graph_problems import graphs_builder
 
 
 def generate_ladder_graph_instances(ladder_graph_ladder_lengths):

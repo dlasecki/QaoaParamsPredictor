@@ -1,7 +1,7 @@
 from qiskit.aqua.components.optimizers import COBYLA
 
-from experiments.optimizers.optimizer import Optimizer
-from helpers.enums.optimizer_name import OptimizerName
+from data_structures.enums.optimizer_name import OptimizerName
+from data_structures.optimizers.optimizer import Optimizer
 
 
 class CobylaOptimizer(Optimizer):

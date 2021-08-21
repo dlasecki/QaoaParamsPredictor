@@ -3,8 +3,8 @@ from abc import abstractmethod
 from qiskit.aqua.operators import WeightedPauliOperator
 from qiskit.aqua.operators.legacy import op_converter
 
-from experiments.optimizers.optimizer import Optimizer
-from helpers.enums.problem_name import ProblemName
+from data_structures.enums.problem_name import ProblemName
+from data_structures.optimizers.optimizer import Optimizer
 
 
 class ProblemInstance:

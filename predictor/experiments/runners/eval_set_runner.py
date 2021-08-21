@@ -7,14 +7,15 @@ from qiskit import Aer
 from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.optimization.applications.ising.common import sample_most_likely
 
-from experiments.base_runner import BaseRunner
-from experiments.data_handlers import results_serializer
-from experiments.kde_model_provider import get_kde_model
-from experiments.problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
-from experiments.problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
+from data_structures.enums.problem_name import ProblemName
+from data_structures.problem_instances.graph_problems.graph_problem_instance_factory import \
+    create_graph_problem_instance
+from data_structures.problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
     generate_random_graph_instances, generate_ladder_graph_instances, generate_caveman_graph_instances, \
     generate_barbell_graph_instances
-from helpers.enums.problem_name import ProblemName
+from experiments.data_handlers import results_serializer
+from experiments.kde_model_provider import get_kde_model
+from experiments.runners.base_runner import BaseRunner
 from qaoa_solver import qaoa
 from qaoa_solver.qaoa import _is_solution_better, _get_instance_with_best_solution
 

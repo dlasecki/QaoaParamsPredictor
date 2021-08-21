@@ -2,8 +2,8 @@ import pathlib
 from os import listdir
 from os.path import isfile, join
 
+from data_structures.enums.optimizer_name import OptimizerName
 from experiments.data_handlers import json_reader
-from helpers.enums.optimizer_name import OptimizerName
 
 
 def load_jsons(directory: str, optimizer_name: OptimizerName, p: int):

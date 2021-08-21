@@ -1,4 +1,4 @@
-from helpers.enums.optimizer_name import OptimizerName
+from data_structures.enums.optimizer_name import OptimizerName
 
 
 class Optimizer:

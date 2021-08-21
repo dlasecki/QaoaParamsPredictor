@@ -1,8 +1,8 @@
-from experiments.optimizers.specializations.cobyla_optimizer import CobylaOptimizer
-from experiments.optimizers.specializations.lbfgs_optimizer import LbfgsOptimizer
-from experiments.optimizers.specializations.nelder_mead_optimizer import NelderMeadOptimizer
-from experiments.optimizers.specializations.spsa_optimizer import SpsaOptimizer
-from helpers.enums.optimizer_name import OptimizerName
+from data_structures.enums.optimizer_name import OptimizerName
+from data_structures.optimizers.specializations.cobyla_optimizer import CobylaOptimizer
+from data_structures.optimizers.specializations.lbfgs_optimizer import LbfgsOptimizer
+from data_structures.optimizers.specializations.nelder_mead_optimizer import NelderMeadOptimizer
+from data_structures.optimizers.specializations.spsa_optimizer import SpsaOptimizer
 
 
 def create_optimizer(optimizer_name: OptimizerName):

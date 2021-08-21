@@ -1,6 +1,6 @@
 import networkx as nx
 
-from helpers.enums.graph_type import GraphType
+from data_structures.enums.graph_type import GraphType
 
 
 def generate_caveman_graph(number_of_cliques: int, size_of_cliques: int, graph_id: int):

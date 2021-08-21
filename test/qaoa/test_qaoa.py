@@ -1,7 +1,8 @@
-from experiments.optimizers.optimizers_factory import create_optimizer
-from experiments.problem_instances.graph_problems.specializations.maxcut_problem_instance import MaxCutProblemInstance
-from experiments.problem_instances.instances_generators.graph_problems.graphs_builder import generate_ladder_graph
-from helpers.enums import optimizer_name
+from data_structures.enums import optimizer_name
+from data_structures.optimizers.optimizers_factory import create_optimizer
+from data_structures.problem_instances.graph_problems.specializations.maxcut_problem_instance import \
+    MaxCutProblemInstance
+from data_structures.problem_instances.instances_generators.graph_problems.graphs_builder import generate_ladder_graph
 from qaoa_solver.qaoa import qaoa_with_optimizer
 
 

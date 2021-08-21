@@ -1,5 +1,5 @@
-from helpers.enums.kernel import Kernel
-from helpers.enums.optimizer_name import OptimizerName
+from data_structures.enums.kernel import Kernel
+from data_structures.enums.optimizer_name import OptimizerName
 from kernel_density_estimation.data_handlers import kde_model_serializer
 from kernel_density_estimation.data_handlers.data_loader import load_jsons
 from kernel_density_estimation.kde_model_trainer import train_kde_model

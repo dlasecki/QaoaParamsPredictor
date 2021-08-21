@@ -2,8 +2,8 @@ import json
 import pathlib
 from datetime import datetime
 
-from experiments.problem_instances.graph_problems.graph_problem_instance import ProblemInstance
-from experiments.problem_instances.result import Result
+from data_structures.problem_instances.graph_problems.graph_problem_instance import ProblemInstance
+from data_structures.problem_instances.result import Result
 
 
 def save_to_json(directory: pathlib.Path, problem_instance: ProblemInstance, kernel=None, bandwidth=None):

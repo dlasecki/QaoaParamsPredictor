@@ -7,7 +7,7 @@ from qiskit.aqua import QuantumInstance, aqua_globals
 from qiskit.aqua.algorithms import QAOA
 from qiskit.optimization.applications.ising.common import sample_most_likely
 
-from experiments.problem_instances.graph_problems.graph_problem_instance import ProblemInstance
+from data_structures.problem_instances.graph_problems.graph_problem_instance import ProblemInstance
 
 
 def qaoa_with_optimizer(problem_instance: ProblemInstance):

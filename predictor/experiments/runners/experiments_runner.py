@@ -4,15 +4,16 @@ import pathlib
 import time
 from pathlib import Path
 
-from experiments.base_runner import BaseRunner
-from experiments.data_handlers import results_serializer
-from experiments.optimizers import optimizers_factory
-from experiments.problem_instances.graph_problems.graph_problem_instance_factory import create_graph_problem_instance
-from experiments.problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
+from data_structures.enums.optimizer_name import OptimizerName
+from data_structures.enums.problem_name import ProblemName
+from data_structures.optimizers import optimizers_factory
+from data_structures.problem_instances.graph_problems.graph_problem_instance_factory import \
+    create_graph_problem_instance
+from data_structures.problem_instances.instances_generators.graph_problems.graphs_instances_generator import \
     generate_random_graph_instances, generate_ladder_graph_instances, generate_caveman_graph_instances, \
     generate_barbell_graph_instances
-from helpers.enums.optimizer_name import OptimizerName
-from helpers.enums.problem_name import ProblemName
+from experiments.data_handlers import results_serializer
+from experiments.runners.base_runner import BaseRunner
 from qaoa_solver import qaoa
 
 
@@ -35,7 +36,7 @@ class ExperimentsRunner(BaseRunner):
         """Builds a file directory depending on the problem instance and problem name provided where a result of the
         worker method can be stored."""
         path = pathlib.Path(__file__).parent.resolve()
-        directory = Path("output", problem_name.value, problem_instance.input_graph.graph["graph_type"].value)
+        directory = Path("../output", problem_name.value, problem_instance.input_graph.graph["graph_type"].value)
         full_path = (path).joinpath(directory)
         return full_path
 
