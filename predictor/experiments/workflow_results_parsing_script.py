@@ -17,6 +17,7 @@ def _get_hash_table(data):
 
 
 def _get_best_solution(all_cases, case_id):
+    """Returns the best solution found among all provided solutions."""
     optimizer_runs = 1250
     graph_id = 0  # max 0 because only 1 graph
     optimal_value = 0
@@ -34,10 +35,12 @@ def _get_best_solution(all_cases, case_id):
 
 
 def _is_solution_good_enough(best_value, current_value, quality_ratio=0.9):
+    """Checks if a solution satisfies a given quality ratio."""
     return current_value <= quality_ratio * best_value
 
 
 def _generate_json_with_params(data, problem_name, graph_type, p, json_name):
+    """Saves a json file with data provided."""
     save_path = "workflow_results_converted/" + problem_name + "/" + graph_type + "/" + "p=" + str(
         int(p)) + "/" + json_name
     with open(save_path, "w") as outfile:
@@ -89,6 +92,7 @@ def _get_bitstrings(all_cases_json, case_id, graph_id, optimizer_run_id):
 
 
 if __name__ == '__main__':
+    """Parses data generated in the cloud and adjusts it to the saupported format."""
     # we get 8 different graphs for a given probability and for each we initialize in 1250 erdos_renyi points
     problems = ["max_cut", "vertex_cover", "stable_set", "partition"]
     graph_type_names = ["random", "barbell", "caveman", "ladder"]

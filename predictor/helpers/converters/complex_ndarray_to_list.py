@@ -4,6 +4,7 @@ from numpy.core.multiarray import ndarray
 
 
 def complex_ndarray_to_matrix(array: ndarray):
+    """Converts a complex ndarray into a matrix (list of lists)."""
     elements = len(array)
     dimension = sqrt(elements)
     assert dimension == int(dimension)

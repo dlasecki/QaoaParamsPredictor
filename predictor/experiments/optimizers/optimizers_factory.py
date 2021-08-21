@@ -6,6 +6,7 @@ from helpers.enums.optimizer_name import OptimizerName
 
 
 def create_optimizer(optimizer_name: OptimizerName):
+    """Factory producing a corresponding optimizer."""
     if optimizer_name == OptimizerName.COBYLA:
         return CobylaOptimizer()
     elif optimizer_name == OptimizerName.SPSA:

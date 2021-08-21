@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class OptimizerName(Enum):
+    """Enum containing possible optimizer names."""
     COBYLA = "cobyla"
     LBFGS = "L-BFGS-B"
     SPSA = "spsa"
