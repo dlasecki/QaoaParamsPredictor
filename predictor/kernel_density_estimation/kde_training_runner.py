@@ -1,3 +1,5 @@
+import itertools
+
 from data_structures.enums.kernel import Kernel
 from data_structures.enums.optimizer_name import OptimizerName
 from kernel_density_estimation.data_handlers import kde_model_serializer
@@ -14,14 +16,12 @@ if __name__ == '__main__':
     problems = ["max_cut", "vertex_cover", "stable_set", "partition"]
     graph_type_names = ["erdos_renyi", "barbell", "caveman", "ladder"]
 
-    for problem in problems:
-        for graph_type_name in graph_type_names:
-            for p_param in p:
-                print(problem + "_" + graph_type_name + "_" + str(p_param))
-                for band in bandwidth:
-                    PATH = "\\experiments\\workflow_results_converted\\" + problem + "\\" + graph_type_name
-                    jsons_list = load_jsons(PATH, OptimizerName.LBFGS, p_param)
-                    kde_model = train_kde_model(jsons_list, kernel[0].value, band)
-                    sample = kde_model.kde_model.sample()
-                    print(sample)
-                    kde_model_serializer.serialize_kde_model(SAVE_PATH, kde_model)
+    parameters = itertools.product(problems, graph_type_names, p, bandwidth)
+
+    for problem, graph_type_name, p_param, band in parameters:
+        PATH = "\\experiments\\workflow_results_converted\\" + problem + "\\" + graph_type_name
+        jsons_list = load_jsons(PATH, OptimizerName.LBFGS, p_param)
+        kde_model = train_kde_model(jsons_list, kernel[0].value, band)
+        sample = kde_model.kde_model.sample()
+        print(sample)
+        kde_model_serializer.serialize_kde_model(SAVE_PATH, kde_model)

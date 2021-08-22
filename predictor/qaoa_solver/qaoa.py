@@ -55,11 +55,13 @@ def _generate_uniformly_random_parameters(p: int):
 
 
 def _is_solution_better(min_cost, qaoa_expectation):
+    """Checks if a solution provided is better than a currently known best solution provided."""
     return not min_cost or qaoa_expectation < min_cost
 
 
 def _get_instance_with_best_solution(problem_instance: ProblemInstance, min_cost, optimal_params,
                                      most_likely_binary_solution, most_likely_solution_value):
+    """Fills a problem instance provided with optimal solution data provided."""
     problem_instance.optimal_value = min_cost
     problem_instance.optimal_params = optimal_params
     problem_instance.most_likely_binary_solution = most_likely_binary_solution

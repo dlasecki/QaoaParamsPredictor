@@ -8,6 +8,7 @@ from experiments.quadratic_solver import get_exact_classical_binary_solution
 
 
 class MaxCutProblemInstance(ProblemInstance):
+    """Problem instance class for a max cut problem."""
 
     def __init__(self, p, input_graph, optimizer: Optimizer, num_starting_points, optimal_params=None,
                  optimal_value=None,
@@ -19,8 +20,10 @@ class MaxCutProblemInstance(ProblemInstance):
                          most_likely_solution_value, self.get_classical_solution(), good_params)
 
     def get_classical_solution(self):
+        """Uses a classical quadratic solver to obtain an optimal value."""
         x = get_exact_classical_binary_solution(self.qubit_operator, self.offset)
         return self.calc_objective_value(x)
 
     def calc_objective_value(self, x):
+        """Calculates an objective function value for the problem given a binary vector encoding a solution."""
         return max_cut.max_cut_value(x, self.weight_operator)

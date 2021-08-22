@@ -8,6 +8,7 @@ from data_structures.optimizers.optimizer import Optimizer
 
 
 class ProblemInstance:
+    """Abstract class storing necessary information about a problem instance to be solved by QAOA."""
 
     def __init__(self, problem_name: ProblemName, p, input_graph, weight_matrix, optimizer: Optimizer,
                  num_starting_points, optimal_params,
@@ -30,5 +31,11 @@ class ProblemInstance:
         self.good_params = good_params
 
     @abstractmethod
+    def get_classical_solution(self):
+        """Uses a classical quadratic solver to obtain an optimal value."""
+        pass
+
+    @abstractmethod
     def calc_objective_value(self, x):
+        """Calculates an objective function value for the problem given a binary vector encoding a solution."""
         pass

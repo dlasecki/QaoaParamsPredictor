@@ -8,14 +8,6 @@ import networkx as nx
 from data_structures.problem_instances.instances_generators.graph_problems import graph_weight_matrix_calculator
 
 
-def _get_hash_table(data):
-    hash_table = {}
-    for step_id in data.keys():
-        step_name = data[step_id]['stepName']
-        hash_table[step_name] = step_id
-    return hash_table
-
-
 def _get_best_solution(all_cases, case_id):
     """Returns the best solution found among all provided solutions."""
     optimizer_runs = 1250
@@ -49,6 +41,7 @@ def _generate_json_with_params(data, problem_name, graph_type, p, json_name):
 
 def _generate_output_dictionary(optimal_params, min_value, good_params, optimizer_name, graph_type, p, weight_matrix,
                                 problem):
+    """Generates a dictionary that stores important fields extracted from a workflow output."""
     dic = {}
     dic["problem_name"] = problem
     dic["hamiltonian_matrix"] = []
@@ -67,11 +60,13 @@ def _generate_output_dictionary(optimal_params, min_value, good_params, optimize
 
 
 def _create_json_pathname():
+    """Creates a file name for a json file."""
     return problem + "_" + graph_type + "_" + str(case_id) + "_" + "p=" + str(int(
         p)) + "_" + optimizer_name + "_pr=" + prob
 
 
 def _get_current_optimal_value(all_cases_json, case_id, graph_id, optimizer_run_id):
+    """Extracts an optimal value from a given workflow run ID."""
     return all_cases_json[case_id]['optimization-results-aggregated'][str(graph_id)][
         str(optimizer_run_id)][
         "opt_value"][
@@ -79,6 +74,7 @@ def _get_current_optimal_value(all_cases_json, case_id, graph_id, optimizer_run_
 
 
 def _get_optimal_params(all_cases_json, case_id, graph_id, optimizer_run_id):
+    """Extracts QAOA parameters associated with an optimal solution for a given workflow run ID."""
     return all_cases_json[case_id]['optimization-results-aggregated'][str(graph_id)][
         str(optimizer_run_id)][
         "opt_params"][
@@ -86,6 +82,7 @@ def _get_optimal_params(all_cases_json, case_id, graph_id, optimizer_run_id):
 
 
 def _get_bitstrings(all_cases_json, case_id, graph_id, optimizer_run_id):
+    """Extracts QAOA binary strings distribution associated with an optimal solution for a given workflow run ID."""
     return all_cases_json[case_id]['bitstring-distributions-aggregated'][str(graph_id)][
         str(optimizer_run_id)][
         'bitstring_distribution']
@@ -107,7 +104,6 @@ if __name__ == '__main__':
                 for file in files:
                     prob = re.split('=', re.split('\.', file)[0])[1] if graph_type_name == "random" else "0"
                     raw_data = json.load(open(join(directory, file), 'r'))
-                    hash_table = _get_hash_table(raw_data)
 
                     all_cases = [case for _, case in raw_data.items()]
 

@@ -11,7 +11,8 @@ from data_structures.problem_instances.graph_problems.specializations.vertex_cov
 
 
 def create_graph_problem_instance(problem_name, p_param, input_graph, optimizer: Optimizer = None,
-                                  initial_points_num=None, initial_points=None):
+                                  initial_points_num=None):
+    """Factory producing a corresponding graph problem problem instanceź."""
     if problem_name == ProblemName.MAX_CUT:
         return MaxCutProblemInstance(p_param, input_graph, optimizer, initial_points_num)
     elif problem_name == ProblemName.GRAPH_PARTITION:
